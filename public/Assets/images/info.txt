@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: Fondamento-Regular
+font link: https://fonts.google.com/specimen/Fondamento
+font author: Astigmatic
+font author site: http://www.astigmatic.com/
+Slogan Font: Aleo-Light.otf
+
+icon designer: Adam Parry
+icon designer link: /adamparry
+        
+{"bg":"#3F2314","font":"#ffffff","icon":"#F69800","slogan":"#ffffff"}
+      
