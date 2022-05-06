@@ -1,6 +1,7 @@
 import React from "react";
-import Item from "../../assets/images/Item/Coffe Table.jpg";
-import Item1 from "../../assets/images/Item/Urban Chair.jpg";
+const newLocal = `/Assets/images/Item/Coffe Table.jpg`;
+// import Item from "/Assets/images/Item/Coffe Table.jpg";
+// import Item1 from "/Assets/images/Item/Urban Chair.jpg";
 
 const products = [
   {
@@ -10,7 +11,7 @@ const products = [
     color: "Natural Teak",
     price: "7999.00",
     quantity: 1,
-    imageSrc: Item,
+    imageSrc: { newLocal },
     imageAlt: "Center Coffee Table.",
   },
   {
@@ -20,7 +21,7 @@ const products = [
     color: "Mahogany",
     price: "6999.00",
     quantity: 1,
-    imageSrc: Item1,
+    imageSrc: { newLocal },
     imageAlt: "Urban Chair",
   },
   {
@@ -30,7 +31,7 @@ const products = [
     color: "Natural Teak",
     price: "7999.00",
     quantity: 1,
-    imageSrc: Item,
+    imageSrc: { newLocal },
     imageAlt: "Center Coffee Table.",
   },
   {
@@ -40,7 +41,7 @@ const products = [
     color: "Mahogany",
     price: "6999.00",
     quantity: 1,
-    imageSrc: Item1,
+    imageSrc: { newLocal },
     imageAlt: "Urban Chair",
   },
   // More products...
@@ -61,7 +62,7 @@ const SlideView = () => {
               <div key={product.id} className="group relative">
                 <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
                   <img
-                    src={product.imageSrc}
+                    src={product.imageSrc.newLocal}
                     alt={product.imageAlt}
                     className="w-full h-full object-center object-cover lg:w-full lg:h-full"
                   />

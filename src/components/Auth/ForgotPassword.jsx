@@ -1,7 +1,45 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState ,useEffect} from "react";
+import { Link , useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { toast } from "react-toastify";
+import { useSelector} from "react-redux"
 
-const forgotPassword = () => {
+const ForgotPassword = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) navigate("/");
+  }, [user]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+
+    const config = {
+      url: process.env.REACT_APP_FORGOT_PASSWORD_REDIRECT,
+      handleCodeInApp: true,
+    };
+
+    await sendPasswordResetEmail(auth, email, config)
+      .then(() => {
+        setEmail("");
+        setLoading(false);
+        toast.success("Check your email for password reset link");
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error(error.message);
+        console.log("ERROR MSG IN FORGOT PASSWORD", error);
+      });
+  };
+
   return (
     <>
       <div className="container mx-auto">
@@ -25,7 +63,10 @@ const forgotPassword = () => {
                   and we'll send you a link to reset your password!
                 </p>
               </div>
-              <form className="px-8 pt-6 pb-8 mb-4 bg-white rounded">
+              <form
+                className="px-8 pt-6 pb-8 mb-4 bg-white rounded"
+                onSubmit={handleSubmit}
+              >
                 <div className="mb-4">
                   <label
                     className="block mb-2 text-sm font-bold text-gray-700"
@@ -37,13 +78,15 @@ const forgotPassword = () => {
                     className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                     id="email"
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter Email Address..."
                   />
                 </div>
                 <div className="mb-6 text-center">
                   <button
                     className="w-full px-4 py-2 font-bold text-white bg-orangepeel rounded-md hover:bg-transparent hover:text-orangepeel hover:border-2 hover:border-orangepeel focus:outline-none focus:shadow-outline"
-                    type="button"
+                    type="submit"
                   >
                     Reset Password
                   </button>
@@ -74,4 +117,4 @@ const forgotPassword = () => {
   );
 };
 
-export default forgotPassword;
+export default ForgotPassword;

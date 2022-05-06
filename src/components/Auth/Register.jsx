@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { sendSignInLinkToEmail } from "firebase/auth";
 
-const Register = () => {
+const Register = ({ history }) => {
   const [email, setEmail] = useState("");
+
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) history.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const config = {
-      url: process.env.REACT_REGISTER_URL,
+    const actionCodeSettings = {
+      url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
       handleCodeInApp: true,
     };
 
-    await auth.sendSignInLinkToEmail(email, config);
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     toast.success(
       `Email is sent to ${email} click the kink to complete the registration`
     );
@@ -81,11 +89,11 @@ const Register = () => {
                   </label>
                   <input
                     className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                    id="email"
                     type="email"
-                    placeholder="Email"
+                    placeholder="Your Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    autoFocus
                   />
                 </div>
                 <div className="mb-4 md:flex md:justify-between">

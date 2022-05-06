@@ -1,6 +1,5 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   MenuAlt1Icon,
@@ -8,9 +7,12 @@ import {
   ShoppingCartIcon,
   UserCircleIcon,
 } from "@heroicons/react/outline";
-
+import { LogoutIcon } from "@heroicons/react/solid";
 import Search from "./Search";
-import Example from "../components/Cart/CartSlide";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 const navigation = [
   { name: "Home", to: "/", current: true },
@@ -24,6 +26,26 @@ function classNames(...classes) {
 }
 
 const Navbar = () => {
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+
+  let { user } = useSelector((state) => ({ ...state }));
+
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        dispatch({
+          type: "LOGOUT",
+          payload: null,
+        });
+      })
+      .catch(() => {
+        console.log(Error);
+      });
+
+    navigate("/login");
+  };
+
   return (
     <Disclosure as="nav" className="bg-white shadow-md">
       {({ open }) => (
@@ -85,15 +107,11 @@ const Navbar = () => {
                   className=" p-1 rounded-full text-gray-600 hover:text-black "
                 >
                   <span className="sr-only">View notifications</span>
-                  <ShoppingCartIcon
-                    className="h-6 w-6"
-                    aria-hidden="true"
-                    onClick={Example}
-                  />
+                  <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
                 {/* Profile dropdown */}
-                {localStorage.getItem("token") ? (
+                {user ? (
                   <Menu as="div" className="ml-3 relative">
                     <div>
                       <Menu.Button className=" p-1 rounded-full text-gray-600 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -122,8 +140,9 @@ const Navbar = () => {
                                 active ? "bg-gray-200" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
+                              title={user.email && user.email.split("@")[0]}
                             >
-                              Your Profile
+                              {`Hi , ${user.email && user.email.split("@")[0]}`}
                             </Link>
                           )}
                         </Menu.Item>
@@ -143,12 +162,14 @@ const Navbar = () => {
                         <Menu.Item>
                           {({ active }) => (
                             <Link
-                              to="/"
+                              to="/Login"
                               className={classNames(
                                 active ? "bg-gray-200" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                                " px-4 py-2 text-sm text-gray-700 block"
                               )}
+                              onClick={logout}
                             >
+                              <LogoutIcon className="w-6 h-6 inline-flex" />{" "}
                               Sign out
                             </Link>
                           )}
@@ -159,7 +180,7 @@ const Navbar = () => {
                 ) : (
                   <Link
                     type="button"
-                    to="/Login"
+                    to="/login"
                     className="p-1 cursor-pointer text-gray-700 font-medium hover:text-orangepeel border-b-orangepeel "
                   >
                     Login
