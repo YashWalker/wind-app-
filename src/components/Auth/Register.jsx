@@ -23,7 +23,7 @@ const Register = ({ history }) => {
 
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
     toast.success(
-      `Email is sent to ${email} click the kink to complete the registration`
+      `Email is sent to ${email} click the link to complete the registration`
     );
 
     window.localStorage.setItem("emailForRegistration", email);

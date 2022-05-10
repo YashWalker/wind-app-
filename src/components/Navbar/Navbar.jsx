@@ -8,11 +8,11 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/outline";
 import { LogoutIcon } from "@heroicons/react/solid";
-import Search from "./Search";
+import Search from "../Search";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 
 const navigation = [
   { name: "Home", to: "/", current: true },
@@ -140,22 +140,25 @@ const Navbar = () => {
                                 active ? "bg-gray-200" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
-                              title={user.email && user.email.split("@")[0]}
                             >
-                              {`Hi , ${user.email && user.email.split("@")[0]}`}
+                              {`Hi , ${user.name}`}
                             </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
                             <Link
-                              to="/"
+                              to={`${
+                                user.role === "admin"
+                                  ? "/admin/dashboard"
+                                  : "/user/profile"
+                              }`}
                               className={classNames(
                                 active ? "bg-gray-200" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
-                              Settings
+                              Your Account
                             </Link>
                           )}
                         </Menu.Item>

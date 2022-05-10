@@ -1,7 +1,19 @@
 import React from "react";
+import AdminBar from "../components/Navbar/AdminBar";
 
-const AdminDeshboard = () => {
-  return <div>AdminDeshboard</div>;
+const AdminDashboard = () => {
+  return (
+    <>
+      <div className="container flex">
+        <div>
+          <AdminBar />
+        </div>
+        <div>
+          <h2 className="text-center">AdminDashboard</h2>
+        </div>
+      </div>
+    </>
+  );
 };
 
-export default AdminDeshboard;
+export default AdminDashboard;
