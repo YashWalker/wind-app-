@@ -21,6 +21,10 @@ import UserRoute from "./components/Routes/UserRoute";
 import AdminRoute from "./components/Routes/AdminRoute";
 import OrderHistory from "./components/Users/OrderHistory";
 import ProductCreate from "./components/Admin/Products/ProductCreate";
+import CategoryCreate from "./components/Admin/Category/CategoryCreate";
+import CategoryUpdate from "./components/Admin/Category/CategoryUpdate";
+import SubCreate from "./components/Admin/Category/Sub/SubCreate";
+import SubUpdate from "./components/Admin/Category/Sub/SubUpdate";
 
 function App() {
   const [bar, setBar] = useState(0);
@@ -100,6 +104,30 @@ function App() {
             exact
             path="product"
             element={<ProductCreate />}
+          ></Route>
+          <Route
+            setBar={setBar}
+            exact
+            path="category"
+            element={<CategoryCreate />}
+          ></Route>
+          <Route
+            setBar={setBar}
+            exact
+            path="sub"
+            element={<SubCreate />}
+          ></Route>
+          <Route
+            setBar={setBar}
+            exact
+            path="category/:slug"
+            element={<CategoryUpdate />}
+          ></Route>
+          <Route
+            setBar={setBar}
+            exact
+            path="sub/:slug"
+            element={<SubUpdate />}
           ></Route>
         </Route>
       </Routes>
