@@ -4,7 +4,10 @@ import { toast } from "react-toastify";
 import { createProduct } from "../../../functions/product";
 import { useSelector } from "react-redux";
 import AdminBar from "../../Navbar/AdminBar";
+import { UploadIcon, XIcon } from "@heroicons/react/outline";
 import { getCategories, getCategorySubs } from "../../../functions/category";
+import axios from "axios";
+import Resizer from "react-image-file-resizer";
 
 const initialState = {
   title: "",
@@ -24,6 +27,7 @@ const ProductCreate = () => {
   const [values, setValues] = useState(initialState);
   const [subOptions, setSubOptions] = useState([]);
   const [showSub, setShowSub] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -78,6 +82,82 @@ const ProductCreate = () => {
     setShowSub(true);
   };
 
+  //Image Upload and Remove
+  const fileUploadAndResize = (e) => {
+    // console.log(e.target.files);
+    // resize
+    let files = e.target.files; // 3
+    let allUploadedFiles = values.images;
+
+    if (files) {
+      setLoading(true);
+      for (let i = 0; i < files.length; i++) {
+        Resizer.imageFileResizer(
+          files[i],
+          720,
+          720,
+          "JPEG",
+          100,
+          0,
+          (uri) => {
+            // console.log(uri);
+            axios
+              .post(
+                `${process.env.REACT_APP_API}/uploadimages`,
+                { image: uri },
+                {
+                  headers: {
+                    authtoken: user ? user.token : "",
+                  },
+                }
+              )
+              .then((res) => {
+                console.log("IMAGE UPLOAD RES DATA", res);
+                setLoading(false);
+                allUploadedFiles.push(res.data);
+
+                setValues({ ...values, images: allUploadedFiles });
+              })
+              .catch((err) => {
+                setLoading(false);
+                console.log("CLOUDINARY UPLOAD ERR", err);
+              });
+          },
+          "base64"
+        );
+      }
+    }
+    // send back to server to upload to cloudinary
+    // set url to images[] in the parent component state - ProductCreate
+  };
+
+  const handleImageRemove = (public_id) => {
+    setLoading(true);
+
+    axios
+      .post(
+        `${process.env.REACT_APP_API}/removeimage`,
+        { public_id },
+        {
+          headers: {
+            authtoken: user ? user.token : "",
+          },
+        }
+      )
+      .then((res) => {
+        setLoading(false);
+        const { images } = values;
+        let filteredImages = images.filter((item) => {
+          return item.public_id !== public_id;
+        });
+        setValues({ ...values, images: filteredImages });
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
   return (
     <>
       <div className="container flex">
@@ -117,13 +197,70 @@ const ProductCreate = () => {
                     ></textarea>
                   </div>
 
-                  <div className="mb-4">
+                  {/* <div className="mb-4">
                     <label className="block mb-1"> Image upload </label>
                     <input
                       type="file"
                       className="w-72"
-                      placeholder="Type here"
+                      multiple
+                      accept="images/*"
+                      onChange={fileUploadAndResize}
                     />
+                  </div> */}
+                  <div className="grid md:grid-cols-2 gap-x-2">
+                    <div className="mb-4">
+                      <label className="block mb-1">Image Upload</label>
+                      <div className="relative">
+                        <label htmlFor="Files" className="">
+                          <UploadIcon className="w-6 h-6 hover:scale-125 hover:stroke-orangepeel cursor-pointer" />
+                        </label>
+                        <input
+                          id="Files"
+                          type="file"
+                          className="w-72 hidden"
+                          multiple
+                          accept="images/*"
+                          onChange={fileUploadAndResize}
+                        />
+                      </div>
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-1">Preview</label>
+                      <div className="relative">
+                        {loading ? (
+                          <img
+                            src={`/Assets/images/Loading.svg`}
+                            alt="Loading"
+                            className="w-16 h-16"
+                          />
+                        ) : (
+                          <div className="flex -space-x-2">
+                            {values.images &&
+                              values.images.map((image) => (
+                                <div
+                                  key={image.public_id}
+                                  className="hover:scale-110 hover:z-10  transform ease-in-out transition duration-500"
+                                >
+                                  <img
+                                    className="inline-block h-14 w-14  object-cover ring-2 ring-gray-200"
+                                    src={image.url}
+                                    alt={image.public_id}
+                                  />
+                                  <span className=" relative right-16 bottom-2 p-1 w-6 align-top inline-block  cursor-pointer">
+                                    <XIcon
+                                      className="hover:scale-110 hover:stroke-orangepeel"
+                                      type="button"
+                                      onClick={() =>
+                                        handleImageRemove(image.public_id)
+                                      }
+                                    />
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-x-2">
