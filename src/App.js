@@ -25,6 +25,9 @@ import CategoryCreate from "./components/Admin/Category/CategoryCreate";
 import CategoryUpdate from "./components/Admin/Category/CategoryUpdate";
 import SubCreate from "./components/Admin/Category/Sub/SubCreate";
 import SubUpdate from "./components/Admin/Category/Sub/SubUpdate";
+import ProductList from "./components/Admin/Products/ProductList";
+import ProductUpdate from "./components/Admin/Products/ProductUpdate";
+import ProductOverView from "./components/Products/ProductOverView";
 
 function App() {
   const [bar, setBar] = useState(0);
@@ -85,11 +88,22 @@ function App() {
           path="/signup/complete"
           element={<CompleteSignup />}
         ></Route>
+        <Route
+          setBar={setBar}
+          exact
+          path="/product/:slug"
+          element={<ProductOverView />}
+        ></Route>
         <Route setBar={setBar} path="/user/*" element={<UserRoute />}>
           <Route
             setBar={setBar}
             path="profile"
             element={<UserProfile />}
+          ></Route>
+          <Route
+            setBar={setBar}
+            path="history"
+            element={<OrderHistory />}
           ></Route>
         </Route>
         <Route setBar={setBar} exact path="/admin/*" element={<AdminRoute />}>
@@ -128,6 +142,18 @@ function App() {
             exact
             path="sub/:slug"
             element={<SubUpdate />}
+          ></Route>
+          <Route
+            setBar={setBar}
+            exact
+            path="products"
+            element={<ProductList />}
+          ></Route>
+          <Route
+            setBar={setBar}
+            exact
+            path="products/:slug"
+            element={<ProductUpdate />}
           ></Route>
         </Route>
       </Routes>

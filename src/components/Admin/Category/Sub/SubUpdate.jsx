@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { getCategories } from "../../../../functions/category";
 import { updateSub, getSub } from "../../../../functions/sub";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-const SubUpdate = ({ match, history }) => {
+const SubUpdate = ({ history }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [name, setName] = useState("");
@@ -19,11 +19,13 @@ const SubUpdate = ({ match, history }) => {
     loadSub();
   }, []);
 
+  let params = useParams();
+
   const loadCategories = () =>
     getCategories().then((c) => setCategories(c.data));
 
   const loadSub = () =>
-    getSub(match.params.slug).then((s) => {
+    getSub(params.slug).then((s) => {
       setName(s.data.name);
       setParent(s.data.parent);
     });
@@ -32,7 +34,7 @@ const SubUpdate = ({ match, history }) => {
     e.preventDefault();
     // console.log(name);
     setLoading(true);
-    updateSub(match.params.slug, { name, parent }, user.token)
+    updateSub(params.slug, { name, parent }, user.token)
       .then((res) => {
         // console.log(res)
         setLoading(false);

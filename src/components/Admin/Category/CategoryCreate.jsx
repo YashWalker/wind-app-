@@ -145,12 +145,10 @@ const CategoryCreate = () => {
             </div>
             <ul className="flex flex-col container max-w-3xl p-2 mx-auto">
               {categories.filter(searched(keyword)).map((c) => (
-                <li className="border-gray-400 flex flex-row mb-2 ">
+                <li className="border-gray-400 flex flex-row mb-2 " key={c.id}>
                   <div className="transition duration-500 shadow ease-in-out transform hover:-translate-y-1 hover:shadow-lg select-none cursor-pointer bg-white rounded-md flex flex-1 items-center p-4">
                     <div className="flex-1 pl-1 md:mr-16">
-                      <div className="font-medium " key={c.id}>
-                        {c.name}
-                      </div>
+                      <div className="font-medium ">{c.name}</div>
                     </div>
                     <Link
                       className="w-24 text-right flex justify-end"

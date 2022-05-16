@@ -1,5 +1,4 @@
 import React from "react";
-import image from "../assets/images/slider/slider1.png";
 
 const NewArrivals = () => {
   const products = [
@@ -7,7 +6,8 @@ const NewArrivals = () => {
       id: 1,
       name: "Wooden Chair",
       href: "/",
-      imageURL: { image },
+      imageURL:
+        "https://res.cloudinary.com/firewood/image/upload/v1652629200/k57b1rjex4jznwe65xa3.jpg",
       imageAlt: "Front of men's Basic Tee in black.",
       price: " 8999 ",
       color: "Natural teak",

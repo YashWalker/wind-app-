@@ -1,13 +1,17 @@
 import React from "react";
-// import Category from "../components/Products/Category";
-// // import SlideView from "../components/Products/SlideView";
-// // import Carousel from "../components/Products/Carousel";
+import Category from "../components/Products/Category";
+import SlideView from "../components/Products/SlideView";
+import Carousel from "../components/Products/Carousel";
+import NewArrivals from "../components/NewArrivals";
 
 const Home = () => {
   return (
-    <div className="container mx-auto">
-
-    </div>
+    <>
+      <Category />
+      <SlideView />
+      <Carousel />
+      <NewArrivals />
+    </>
   );
 };
 

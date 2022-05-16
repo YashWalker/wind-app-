@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createProduct } from "../../../functions/product";
 import { useSelector } from "react-redux";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { updateProduct, getProduct } from "../../../functions/product";
 import AdminBar from "../../Navbar/AdminBar";
 import { UploadIcon, XIcon } from "@heroicons/react/outline";
 import { getCategories, getCategorySubs } from "../../../functions/category";
@@ -13,7 +13,6 @@ const initialState = {
   title: "",
   description: "",
   price: "",
-  categories: [],
   category: "",
   subs: [],
   shipping: "",
@@ -25,20 +24,25 @@ const initialState = {
   sellprice: "",
 };
 
-const ProductCreate = () => {
+const ProductUpdate = () => {
   const [values, setValues] = useState(initialState);
+  const [categories, setCategories] = useState([]);
   const [subOptions, setSubOptions] = useState([]);
-  const [showSub, setShowSub] = useState(false);
+  const [arrayOfSubs, setArrayOfSubs] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // redux -state user
   const { user } = useSelector((state) => ({ ...state }));
+  // router
+  const { slug } = useParams();
+  let navigate = useNavigate();
 
-  // destructure
   const {
     title,
     description,
     price,
-    categories,
+
     category,
     subs,
     shipping,
@@ -51,45 +55,74 @@ const ProductCreate = () => {
   } = values;
 
   useEffect(() => {
+    loadProduct();
     loadCategories();
   }, []);
 
-  const loadCategories = () =>
-    getCategories().then((c) => setValues({ ...values, categories: c.data }));
+  const loadProduct = () => {
+    getProduct(slug).then((p) => {
+      setValues({ ...values, ...p.data });
 
+      getCategorySubs(p.data.category._id).then((res) => {
+        setSubOptions(res.data);
+      });
+
+      let arr = [];
+      p.data.subs.map((s) => arr.push(s._id));
+
+      setArrayOfSubs((prev) => arr);
+    });
+  };
+
+  const loadCategories = () =>
+    getCategories().then((c) => {
+      setCategories(c.data);
+    });
+  const handleCategoryChange = (e) => {
+    e.preventDefault();
+
+    setValues({ ...values, subs: [] });
+
+    setSelectedCategory(e.target.value);
+
+    getCategorySubs(e.target.value).then((res) => {
+      setSubOptions(res.data);
+    });
+
+    // if user clicks back to the original category
+    // show its sub categories in default
+    if (values.category._id === e.target.value) {
+      loadProduct();
+    }
+    // clear old sub category ids
+    setArrayOfSubs([]);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    createProduct(values, user.token)
+    setLoading(true);
+
+    values.category = selectedCategory ? selectedCategory : values.category;
+
+    updateProduct(slug, values, user.token)
       .then((res) => {
-        console.log(res);
-        window.alert(`"${res.data.title}" is created`);
-        window.location.reload();
+        setLoading(false);
+        toast.success(`"${res.data.title}" is updated`);
+        navigate("/admin/products");
+        console.log("Update", res.data);
       })
       .catch((err) => {
-        if (err.response.status === 400) toast.error(err.response.data);
+        console.log(err);
+        setLoading(false);
+        toast.error(err.response.data.err);
       });
-    setShowSub(true);
   };
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleCategoryChange = (e) => {
-    e.preventDefault();
-    console.log("CLICKED CATEGORY", e.target.value);
-    setValues({ ...values, category: e.target.value });
-    getCategorySubs(e.target.value).then((res) => {
-      console.log("SUB OPTIONS ON CATEGORY CLICK", res);
-      setSubOptions(res.data);
-    });
-    setShowSub(true);
-  };
-
   //Image Upload and Remove
   const fileUploadAndResize = (e) => {
-    // console.log(e.target.files);
-    // resize
     let files = e.target.files; // 3
     let allUploadedFiles = values.images;
 
@@ -116,7 +149,6 @@ const ProductCreate = () => {
                 }
               )
               .then((res) => {
-                console.log("IMAGE UPLOAD RES DATA", res);
                 setLoading(false);
                 allUploadedFiles.push(res.data);
 
@@ -124,7 +156,6 @@ const ProductCreate = () => {
               })
               .catch((err) => {
                 setLoading(false);
-                console.log("CLOUDINARY UPLOAD ERR", err);
               });
           },
           "base64"
@@ -265,8 +296,8 @@ const ProductCreate = () => {
                           name="finish"
                           onChange={handleChange}
                           className="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                          value={finish}
                         >
-                          <option> Select Finish </option>
                           {finishes.map((f) => (
                             <option key={f} value={f}>
                               {f}
@@ -292,8 +323,8 @@ const ProductCreate = () => {
                           name="shipping"
                           onChange={handleChange}
                           className="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                          value={shipping === "Yes" ? "Yes" : "No "}
                         >
-                          <option> Select </option>
                           <option value="No"> No </option>
                           <option value="Yes"> Yes </option>
                         </select>
@@ -319,8 +350,10 @@ const ProductCreate = () => {
                           name="category"
                           onChange={handleCategoryChange}
                           className="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                          value={
+                            selectedCategory ? selectedCategory : category._id
+                          }
                         >
-                          <option> Select Category </option>
                           {categories.length > 0 &&
                             categories.map((c) => (
                               <option key={c._id} value={c._id}>
@@ -347,12 +380,12 @@ const ProductCreate = () => {
                           name="subs"
                           onChange={handleChange}
                           className="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                          //value={arrayOfSubs}
                         >
-                          <option> Select </option>
                           {subOptions.length > 0 &&
-                            subOptions.map((c) => (
-                              <option key={c._id} value={c._id}>
-                                {c.name}
+                            subOptions.map((s) => (
+                              <option key={s._id} value={s._id}>
+                                {s.name}
                               </option>
                             ))}
                         </select>
@@ -442,11 +475,11 @@ const ProductCreate = () => {
                     className="m-2 px-4 py-2 text-center inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
                   >
                     {" "}
-                    Add item{" "}
+                    Update item{" "}
                   </button>
 
                   <Link
-                    to="#"
+                    to="/admin/products"
                     className="px-4 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
                   >
                     {" "}
@@ -462,4 +495,4 @@ const ProductCreate = () => {
   );
 };
 
-export default ProductCreate;
+export default ProductUpdate;
