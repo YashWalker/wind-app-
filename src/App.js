@@ -71,7 +71,9 @@ function App() {
       <Navbar />
       <LoadingBar color="#000000" height={4} progress={progress} />
       <ToastContainer />
+
       <CartSlide />
+
       <CRoutes>
         <Route exact path="/" element={<Home />}></Route>
         <Route exact path="/login" element={<Login />}></Route>

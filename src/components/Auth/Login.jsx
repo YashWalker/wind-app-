@@ -37,7 +37,7 @@ const Login = ({ history }) => {
       if (res.data.role === "admin") {
         navigate("/admin/dashboard");
       } else {
-        navigate("/user/history");
+        navigate("/");
       }
     }
   };

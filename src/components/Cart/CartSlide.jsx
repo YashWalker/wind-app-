@@ -4,13 +4,18 @@ import { XIcon } from "@heroicons/react/outline";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
-export default function Example() {
-  const dispatch = useDispatch();
-  const { drawer, cart } = useSelector((state) => ({ ...state }));
-  const [open, setOpen] = useState(true);
+export default function Example({ c }) {
+  const { drawer, cart, user } = useSelector((state) => ({ ...state }));
+
+  const getTotal = () => {
+    return cart.reduce((currentValue, nextValue) => {
+      return currentValue + nextValue.count * nextValue.sellprice;
+    }, 0);
+  };
+  let dispatch = useDispatch();
 
   return (
-    <Transition.Root show={drawer} visible={drawer} as={Fragment}>
+    <Transition.Root show={drawer} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-hidden"
@@ -91,7 +96,9 @@ export default function Example() {
                                         {product.title}{" "}
                                       </a>
                                     </h3>
-                                    <p className="ml-4">{product.sellprice}</p>
+                                    <p className="ml-4">
+                                      ₹ {product.sellprice}
+                                    </p>
                                   </div>
                                   <p className="mt-1 text-sm text-gray-500">
                                     {product.finish}
@@ -99,17 +106,8 @@ export default function Example() {
                                 </div>
                                 <div className="flex flex-1 items-end justify-between text-sm">
                                   <p className="text-gray-500">
-                                    Qty {product.quantity}
+                                    Qty {product.count} Item
                                   </p>
-
-                                  <div className="flex">
-                                    <button
-                                      type="button"
-                                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
                                 </div>
                               </div>
                             </li>
@@ -122,18 +120,40 @@ export default function Example() {
                   <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>$262.00</p>
+                      <p> {`₹ ${getTotal()}`}</p>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.
                     </p>
                     <div className="mt-6">
-                      <a
-                        href="/"
-                        className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                      >
-                        Checkout
-                      </a>
+                      {user ? (
+                        <Link
+                          onClick={() => {
+                            dispatch({
+                              type: "SET_VISIBLE",
+                              payload: false,
+                            });
+                          }}
+                          to="/checkout"
+                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        >
+                          Checkout
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/login"
+                          state={{ from: "/cart" }}
+                          onClick={() => {
+                            dispatch({
+                              type: "SET_VISIBLE",
+                              payload: false,
+                            });
+                          }}
+                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        >
+                          Login to Checkout
+                        </Link>
+                      )}
                     </div>
                     <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                       <p>
@@ -141,7 +161,12 @@ export default function Example() {
                         <button
                           type="button"
                           className="font-medium text-indigo-600 hover:text-indigo-500"
-                          onClick={() => setOpen(false)}
+                          onClick={() => {
+                            dispatch({
+                              type: "SET_VISIBLE",
+                              payload: false,
+                            });
+                          }}
                         >
                           Continue Shopping
                           <span aria-hidden="true"> &rarr;</span>
