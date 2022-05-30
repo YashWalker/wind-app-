@@ -8,7 +8,7 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/outline";
 import { LogoutIcon } from "@heroicons/react/solid";
-import Search from "../Search";
+import Search from "../Utils/Search";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
@@ -17,8 +17,8 @@ import { auth } from "../../firebase";
 const navigation = [
   { name: "Home", to: "/", current: true },
   { name: "New Arrival", to: "/", current: false },
-  { name: "Category", to: "/", current: false },
-  { name: "Contact Us", to: "/", current: false },
+  { name: "Furniture", to: "/furniture", current: false },
+  { name: "About Us", to: "/", current: false },
 ];
 
 function classNames(...classes) {
@@ -29,7 +29,7 @@ const Navbar = () => {
   let dispatch = useDispatch();
   let navigate = useNavigate();
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { user, cart } = useSelector((state) => ({ ...state }));
 
   const logout = () => {
     signOut(auth)
@@ -102,13 +102,26 @@ const Navbar = () => {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <Search />
 
-                <button
-                  type="button"
-                  className=" p-1 rounded-full text-gray-600 hover:text-black "
+                <Link
+                  to="/cart"
+                  className=" p-1 rounded-full text-gray-600 hover:text-black mr-2"
                 >
-                  <span className="sr-only">View notifications</span>
-                  <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                  <span className="text-xs text-white  relative bottom-0.5 left-4  ">
+                    {cart.length > 0 ? (
+                      <span className="p-1 rounded-full  bg-red-500">
+                        {cart.length}
+                      </span>
+                    ) : (
+                      <span className="text-transparent bg-transparent">
+                        {cart.length}
+                      </span>
+                    )}
+                  </span>
+                  <ShoppingCartIcon
+                    className="h-6 w-6 relative bottom-3"
+                    aria-hidden="true"
+                  />
+                </Link>
 
                 {/* Profile dropdown */}
                 {user ? (

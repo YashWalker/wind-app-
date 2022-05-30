@@ -10,7 +10,7 @@ const AdminBar = () => {
             <nav className="mt-10 px-6 ">
               <Link
                 className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
-                to="#"
+                to="/admin/dashboard"
               >
                 <span className="mx-4 text-lg font-normal">DashBoard</span>
                 <span className="flex-grow text-right"></span>
@@ -33,7 +33,7 @@ const AdminBar = () => {
                 className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
                 to="/admin/product"
               >
-                <span className="mx-4 text-lg font-normal">Products</span>
+                <span className="mx-4 text-lg font-normal">New Product</span>
                 <span className="flex-grow text-right"></span>
               </Link>
               <Link
@@ -45,16 +45,18 @@ const AdminBar = () => {
               </Link>
               <Link
                 className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
-                to="/user/profile/wishlist"
+                to="/admin/orders"
               >
-                <span className="mx-4 text-lg font-normal">Orders</span>
+                <span className="mx-4 text-lg font-normal">New Orders</span>
                 <span className="flex-grow text-right"></span>
               </Link>
               <Link
                 className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
-                to="/user/profile/wishlist"
+                to="/admin/completedorders"
               >
-                <span className="mx-4 text-lg font-normal">Customer</span>
+                <span className="mx-4 text-lg font-normal">
+                  Completed Orders
+                </span>
                 <span className="flex-grow text-right"></span>
               </Link>
             </nav>

@@ -1,44 +1,25 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-// import Item from "/Assets/images/Item/Coffe Table.jpg";
-// import Item1 from "/Assets/images/Item/Urban Chair.jpg";
-
-const products = [
-  {
-    id: 1,
-    name: "Center Coffee Table",
-    href: "#",
-    color: "Natural Teak",
-    price: "7999.00",
-    quantity: 1,
-    imageSrc: "/public/Assets/images/Item/Coffe Table.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Urban Chair",
-    href: "#",
-    color: "Mahogany",
-    price: "6999.00",
-    quantity: 1,
-    imageSrc: "/public/Assets/images/Item/Urban Chair.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function Example() {
+  const dispatch = useDispatch();
+  const { drawer, cart } = useSelector((state) => ({ ...state }));
   const [open, setOpen] = useState(true);
 
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition.Root show={drawer} visible={drawer} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 overflow-hidden"
-        onClose={setOpen}
+        onClose={() => {
+          dispatch({
+            type: "SET_VISIBLE",
+            payload: false,
+          });
+        }}
       >
         <div className="absolute inset-0 overflow-hidden">
           <Transition.Child
@@ -75,7 +56,12 @@ export default function Example() {
                         <button
                           type="button"
                           className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          onClick={() => setOpen(false)}
+                          onClick={() => {
+                            dispatch({
+                              type: "SET_VISIBLE",
+                              payload: false,
+                            });
+                          }}
                         >
                           <span className="sr-only">Close panel</span>
                           <XIcon className="h-6 w-6" aria-hidden="true" />
@@ -86,12 +72,12 @@ export default function Example() {
                     <div className="mt-8">
                       <div className="flow-root">
                         <ul className="-my-6 divide-y divide-gray-200">
-                          {products.map((product) => (
-                            <li key={product.id} className="flex py-6">
+                          {cart.map((product) => (
+                            <li key={product._id} className="flex py-6">
                               <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                 <img
-                                  src={product.imageSrc}
-                                  alt={product.imageAlt}
+                                  src={product.images?.[0].url}
+                                  alt={product.title}
                                   className="h-full w-full object-cover object-center"
                                 />
                               </div>
@@ -100,15 +86,15 @@ export default function Example() {
                                 <div>
                                   <div className="flex justify-between text-base font-medium text-gray-900">
                                     <h3>
-                                      <a href={product.href}>
+                                      <a href={`/product/${product.slug}`}>
                                         {" "}
-                                        {product.name}{" "}
+                                        {product.title}{" "}
                                       </a>
                                     </h3>
-                                    <p className="ml-4">{product.price}</p>
+                                    <p className="ml-4">{product.sellprice}</p>
                                   </div>
                                   <p className="mt-1 text-sm text-gray-500">
-                                    {product.color}
+                                    {product.finish}
                                   </p>
                                 </div>
                                 <div className="flex flex-1 items-end justify-between text-sm">

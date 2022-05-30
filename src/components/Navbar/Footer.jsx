@@ -1,10 +1,9 @@
 import React from "react";
-import ReactSVG from "../assets/images/Icon-Logo.svg";
 
 const Footer = () => {
   return (
     <>
-      <div className="absolute inset-x-0 bottom-0 bg-bistre">
+      <div className="absolute inset-x-0  bg-bistre">
         <svg
           className="absolute top-0 w-full h-6 -mt-5 sm:-mt-10 sm:h-16 text-deep-purple-accent-400"
           preserveAspectRatio="none"
@@ -25,7 +24,7 @@ const Footer = () => {
                 className="inline-flex items-center"
               >
                 <img
-                  src={ReactSVG}
+                  src={`/Assets/images/Icon-Logo.svg`}
                   className="block h-12 w-auto"
                   alt="Woodkoof"
                 />

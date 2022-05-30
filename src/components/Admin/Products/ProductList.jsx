@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import AdminBar from "../../Navbar/AdminBar";
-import { getProductsByCount, removeProduct } from "../../../functions/product";
+import {
+  getProductsCount,
+  getProducts,
+  removeProduct,
+} from "../../../functions/product";
 import { Link } from "react-router-dom";
 import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
 import { useSelector } from "react-redux";
@@ -10,20 +14,26 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [productsCount, setProductsCount] = useState(0);
+  const [page, setPage] = useState(1);
 
   const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
     loadAllProducts();
+  }, [page]);
+
+  useEffect(() => {
+    getProductsCount().then((res) => setProductsCount(res.data));
   }, []);
 
   const loadAllProducts = () => {
     setLoading(true);
-    getProductsByCount(100)
+    getProducts("createdAt", "desc", page)
       .then((res) => {
         setProducts(res.data);
-
         setLoading(false);
+        console.log(page);
       })
       .catch((err) => {
         setLoading(false);
@@ -230,33 +240,18 @@ const ProductList = () => {
                           <path d="M1427 301l-531 531 531 531q19 19 19 45t-19 45l-166 166q-19 19-45 19t-45-19l-742-742q-19-19-19-45t19-45l742-742q19-19 45-19t45 19l166 166q19 19 19 45t-19 45z"></path>
                         </svg>
                       </button>
+
                       <button
                         type="button"
                         className="w-full px-4 py-2 border-t border-b text-base text-indigo-500 bg-white hover:bg-gray-100 "
                       >
-                        1
+                        {page}
                       </button>
-                      <button
-                        type="button"
-                        className="w-full px-4 py-2 border text-base text-gray-600 bg-white hover:bg-gray-100"
-                      >
-                        2
-                      </button>
-                      <button
-                        type="button"
-                        className="w-full px-4 py-2 border-t border-b text-base text-gray-600 bg-white hover:bg-gray-100"
-                      >
-                        3
-                      </button>
-                      <button
-                        type="button"
-                        className="w-full px-4 py-2 border text-base text-gray-600 bg-white hover:bg-gray-100"
-                      >
-                        4
-                      </button>
+
                       <button
                         type="button"
                         className="w-full p-4 border-t border-b border-r text-base  rounded-r-xl text-gray-600 bg-white hover:bg-gray-100"
+                        onChange={(value) => setPage(value)}
                       >
                         <svg
                           width="9"

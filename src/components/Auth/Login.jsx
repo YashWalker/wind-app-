@@ -1,32 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { createOrUpdateUser } from "../../functions/auth";
 import { auth, googleAuthProvider } from "../../firebase";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 
-const Login = () => {
+const Login = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   let dispatch = useDispatch();
   let navigate = useNavigate();
+  let location = useLocation();
 
   const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
-    if (user && user.token) {
-      navigate("/");
+    let intended = location.state;
+    if (intended) {
+      return;
+    } else {
+      if (user && user.token) navigate("/");
     }
   }, [user, navigate]);
 
   const roleBasedRedirect = (res) => {
-    if (res.data.role === "admin") {
-      navigate("/admin/dashboard");
+    const intended = location.state;
+    console.log(intended);
+    console.log(location);
+
+    if (intended) {
+      navigate(intended.from);
     } else {
-      navigate("/");
+      if (res.data.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/history");
+      }
     }
   };
 

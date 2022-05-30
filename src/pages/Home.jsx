@@ -2,15 +2,17 @@ import React from "react";
 import Category from "../components/Products/Category";
 import SlideView from "../components/Products/SlideView";
 import Carousel from "../components/Products/Carousel";
-import NewArrivals from "../components/NewArrivals";
-
+import Footer from "../components/Navbar/Footer";
+import FeatureProduct from "../components/Products/FeatureProduct";
 const Home = () => {
   return (
     <>
       <Category />
+      <FeatureProduct />
       <SlideView />
       <Carousel />
-      <NewArrivals />
+      <hr className="my-5" />
+      <Footer />
     </>
   );
 };

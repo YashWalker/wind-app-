@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth } from "./firebase";
 import { useDispatch } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
+import CRoutes from "./routes";
 
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
@@ -28,9 +29,14 @@ import SubUpdate from "./components/Admin/Category/Sub/SubUpdate";
 import ProductList from "./components/Admin/Products/ProductList";
 import ProductUpdate from "./components/Admin/Products/ProductUpdate";
 import ProductOverView from "./components/Products/ProductOverView";
+import CategoryVise from "./components/Products/CategoryVise";
+import Furniture from "./pages/Furniture";
+import Cart from "./pages/Cart";
+import CheckOut from "./pages/CheckOut";
+import CartSlide from "./components/Cart/CartSlide";
 
 function App() {
-  const [bar, setBar] = useState(0);
+  const [progress, setProgress] = useState(0);
   const dispatch = useDispatch();
 
   // to check firebase auth state
@@ -63,100 +69,59 @@ function App() {
   return (
     <>
       <Navbar />
-      <LoadingBar color="#000000" height={3} bar={bar} setBar={setBar} />{" "}
+      <LoadingBar color="#000000" height={4} progress={progress} />
       <ToastContainer />
-      <Routes>
-        <Route exact path="/" element={<Home />}>
-          {" "}
-        </Route>
-        <Route exact path="/login" setBar={setBar} element={<Login />}></Route>
+      <CartSlide />
+      <CRoutes>
+        <Route exact path="/" element={<Home />}></Route>
+        <Route exact path="/login" element={<Login />}></Route>
+        <Route exact path="/signup" element={<Register />}></Route>
+        <Route exact path="/furniture" element={<Furniture />}></Route>
+        <Route exact path="/cart" element={<Cart />}></Route>
+        <Route exact path="/checkout" element={<CheckOut />}></Route>
         <Route
-          exact
-          path="/signup"
-          setBar={setBar}
-          element={<Register />}
-        ></Route>
-        <Route
-          setBar={setBar}
           exact
           path="/forgotPassword"
           element={<ForgotPassword />}
         ></Route>
         <Route
-          setBar={setBar}
           exact
           path="/signup/complete"
           element={<CompleteSignup />}
         ></Route>
         <Route
-          setBar={setBar}
           exact
           path="/product/:slug"
           element={<ProductOverView />}
         ></Route>
-        <Route setBar={setBar} path="/user/*" element={<UserRoute />}>
-          <Route
-            setBar={setBar}
-            path="profile"
-            element={<UserProfile />}
-          ></Route>
-          <Route
-            setBar={setBar}
-            path="history"
-            element={<OrderHistory />}
-          ></Route>
+        <Route exact path="/category/:slug" element={<CategoryVise />}></Route>
+        <Route path="/user/*" element={<UserRoute />}>
+          <Route path="profile" element={<UserProfile />}></Route>
+          <Route path="history" element={<OrderHistory />}></Route>
         </Route>
-        <Route setBar={setBar} exact path="/admin/*" element={<AdminRoute />}>
+        <Route exact path="/admin/*" element={<AdminRoute />}>
+          <Route exact path="dashboard" element={<AdminDashboard />}></Route>
+          <Route exact path="product" element={<ProductCreate />}></Route>
           <Route
-            setBar={setBar}
-            exact
-            path="dashboard"
-            element={<AdminDashboard />}
-          ></Route>
-          <Route
-            setBar={setBar}
-            exact
-            path="product"
-            element={<ProductCreate />}
-          ></Route>
-          <Route
-            setBar={setBar}
             exact
             path="category"
-            element={<CategoryCreate />}
+            element={<CategoryCreate setProgress={setProgress} />}
           ></Route>
+          <Route exact path="sub" element={<SubCreate />}></Route>
           <Route
-            setBar={setBar}
-            exact
-            path="sub"
-            element={<SubCreate />}
-          ></Route>
-          <Route
-            setBar={setBar}
             exact
             path="category/:slug"
             element={<CategoryUpdate />}
           ></Route>
+          <Route exact path="sub/:slug" element={<SubUpdate />}></Route>
+          <Route exact path="products" element={<ProductList />}></Route>
           <Route
-            setBar={setBar}
-            exact
-            path="sub/:slug"
-            element={<SubUpdate />}
-          ></Route>
-          <Route
-            setBar={setBar}
-            exact
-            path="products"
-            element={<ProductList />}
-          ></Route>
-          <Route
-            setBar={setBar}
             exact
             path="products/:slug"
             element={<ProductUpdate />}
           ></Route>
         </Route>
-      </Routes>
+      </CRoutes>
     </>
   );
 }

@@ -28,7 +28,10 @@ const Category = () => {
           </h2>
           <div className="flex-row flex flex-wrap p-4 text-center place-content-center ">
             {data.map((ele) => (
-              <Link to={`/${ele}`} className="hover:text-orangepeel">
+              <Link
+                to={`/category/${ele.toLowerCase()}`}
+                className="hover:text-orangepeel"
+              >
                 <img
                   src={`/Assets/images/Category/${ele}.svg`}
                   alt={`${ele}`}

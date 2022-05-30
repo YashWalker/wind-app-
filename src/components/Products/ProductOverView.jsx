@@ -1,107 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProduct } from "../../functions/product";
-import { StarIcon } from "@heroicons/react/solid";
-import { RadioGroup } from "@headlessui/react";
-
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        gridTemplateRows: {
-          '[auto,auto,1fr]': 'auto auto 1fr',
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-
-const product = {
-  breadcrumbs: [
-    { id: 1, name: "Sofa", href: "#" },
-    { id: 2, name: "Clothing", href: "#" },
-  ],
-  images: [
-    {
-      url: "https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg",
-      alt: "Two each of gray, white, and black shirts laying flat.",
-    },
-    {
-      url: "https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg",
-      alt: "Model wearing plain black basic tee.",
-    },
-    {
-      url: "https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg",
-      alt: "Model wearing plain gray basic tee.",
-    },
-    {
-      url: "https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg",
-      alt: "Model wearing plain white basic tee.",
-    },
-  ],
-
-  colors: [
-    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-  ],
-  sizes: [
-    { name: "XXS", inStock: false },
-    { name: "XS", inStock: true },
-    { name: "S", inStock: true },
-    { name: "M", inStock: true },
-    { name: "L", inStock: true },
-    { name: "XL", inStock: true },
-    { name: "2XL", inStock: true },
-    { name: "3XL", inStock: true },
-  ],
-
-  highlights: [
-    "Hand cut and sewn locally",
-    "Dyed with our proprietary colors",
-    "Pre-washed & pre-shrunk",
-    "Ultra-soft 100% cotton",
-  ],
-};
-const reviews = { href: "#", average: 4, totalCount: 117 };
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { getProduct, getRelated, productStar } from "../../functions/product";
+import StarRating from "../Utils/StarRating";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
+import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/outline";
+import RelatedItem from "./RelatedItem";
+import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 
 const ProductOverView = () => {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [related, setRelated] = useState([]);
+  const [star, setStar] = useState(0);
+
+  const { user, cart } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
 
   const { slug } = useParams();
-  const { images } = products;
 
   useEffect(() => {
-    loadAllProducts();
-  }, []);
+    loadSingleProducts();
+  }, [slug]);
 
-  const loadAllProducts = () => {
+  // useEffect(() => {
+  //   if (products.ratings && user) {
+  //     let existingRatingObject = products.ratings.find(
+  //       (ele) => ele.postedBy.toString() === user._id.toString()
+  //     );
+  //     existingRatingObject && setStar(existingRatingObject.star); // current user's star
+  //   }
+  // });
+
+  const loadSingleProducts = () => {
     setLoading(true);
     getProduct(slug)
       .then((res) => {
         setProducts(res.data);
+        getRelated(res.data._id).then((res) => setRelated(res.data));
         setLoading(false);
-        console.log(res.data);
       })
       .catch((err) => {
         setLoading(false);
@@ -109,294 +47,167 @@ const ProductOverView = () => {
       });
   };
 
+  const handleAddToCart = () => {
+    // create cart array
+    let cart = [];
+    if (typeof window !== "undefined") {
+      // if cart is in local storage GET it
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      // push new product to cart
+      cart.push({
+        ...products,
+        count: 1,
+      });
+      // remove duplicates
+      let unique = _.uniqWith(cart, _.isEqual);
+      // save to local storage
+      // console.log('unique', unique)
+      localStorage.setItem("cart", JSON.stringify(unique));
+      // show tooltip
+
+      // add to redux state
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
+      //drawer
+      dispatch({
+        type: "SET_VISIBLE",
+        payload: true,
+      });
+    }
+  };
+
+  //star Rating
+  // const onStarClick = (newRating, name) => {
+  //   setStar(newRating);
+  //   console.table(newRating, name);
+  //   productStar(name, newRating, user.token).then((res) => {
+  //     console.log("rating clicked", res.data);
+  //     loadSingleProducts(); // if you want to show updated rating in real time
+  //   });
+  // };
+
   return (
-    <div className="bg-white">
-      <div className="pt-6">
-        <nav aria-label="Breadcrumb">
-          <ol
-            role="list"
-            className="max-w-2xl mx-auto px-4 flex items-center space-x-2 sm:px-6 lg:max-w-7xl lg:px-8"
-          >
-            {product.breadcrumbs.map((breadcrumb) => (
-              <li key={breadcrumb.id}>
-                <div className="flex items-center">
-                  <a
-                    href={breadcrumb.href}
-                    className="mr-2 text-sm font-medium text-gray-900"
-                  >
-                    {breadcrumb.name}
-                  </a>
+    <>
+      <section className="bg-gray-50 py-10">
+        <div className="container max-w-screen-xl mx-auto px-4">
+          <div className="bg-white border border-gray-200 shadow-sm rounded mb-5 p-4 lg:p-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <aside>
+                <div className="border border-gray-200 p-3 text-center rounded mb-5">
+                  <Carousel autoPlay>
+                    {products.images &&
+                      products.images.map((i) => (
+                        <div key={i.public_id}>
+                          <img src={i.url} alt={products.slug.split(" ")} />
+                        </div>
+                      ))}
+                  </Carousel>
+                </div>
+              </aside>
+              <main>
+                <h2 className="font-semibold text-2xl mb-4">
+                  {products.title}
+                </h2>
+                <div className="flex flex-wrap items-center space-x-2 mb-2">
+                  <StarRating className="block " />
+                  <span className="text-yellow-500">9.3</span>
+
                   <svg
-                    width={16}
-                    height={20}
-                    viewBox="0 0 16 20"
-                    fill="currentColor"
+                    width="6px"
+                    height="6px"
                     xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    className="w-4 h-5 text-gray-300"
                   >
-                    <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                    <circle cx="3" cy="3" r="3" fill="#DBDBDB" />
                   </svg>
-                </div>
-              </li>
-            ))}
-            <li className="text-sm">
-              <a
-                href={product.href}
-                aria-current="page"
-                className="font-medium text-gray-500 hover:text-gray-600"
-              >
-                {product.name}
-              </a>
-            </li>
-          </ol>
-        </nav>
-        {JSON.stringify(images)}
-        {/* Image gallery */}
-        <div className="mt-6 max-w-2xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-3 lg:gap-x-8">
-          <div className="hidden aspect-w-3 aspect-h-4 rounded-lg overflow-hidden lg:block">
-            <img
-              src={product.images[0].url}
-              alt={products.description}
-              className="w-full h-full object-center object-cover"
-            />
-          </div>
-          <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-            <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
-              <img
-                src={product.images[1].url}
-                alt={products.title}
-                className="w-full h-full object-center object-cover"
-              />
-            </div>
-            <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
-              <img
-                src={product.images[2].url}
-                alt={products.title}
-                className="w-full h-full object-center object-cover"
-              />
-            </div>
-          </div>
-          <div className="aspect-w-4 aspect-h-5 sm:rounded-lg sm:overflow-hidden lg:aspect-w-3 lg:aspect-h-4">
-            <img
-              src={product.images[3].url}
-              alt={products.title}
-              className="w-full h-full object-center object-cover"
-            />
-          </div>
-        </div>
 
-        {/* Product info */}
-        <div className="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
-          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-              {products.title}
-            </h1>
-          </div>
+                  <span className="text-gray-400">
+                    <i className="fa fa-shopping-bag mr-2"></i>
+                    {products.sold} Orders
+                  </span>
 
-          {/* Options */}
-          <div className="mt-4 lg:mt-0 lg:row-span-3">
-            <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl text-gray-900">{products.price}</p>
-
-            {/* Reviews */}
-            <div className="mt-6">
-              <h3 className="sr-only">Reviews</h3>
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        reviews.average > rating
-                          ? "text-gray-900"
-                          : "text-gray-200",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </div>
-                <p className="sr-only">{reviews.average} out of 5 stars</p>
-                <a
-                  href={reviews.href}
-                  className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  {reviews.totalCount} reviews
-                </a>
-              </div>
-            </div>
-
-            <form className="mt-10">
-              {/* Colors */}
-              <div>
-                <h3 className="text-sm text-gray-900 font-medium">Color</h3>
-
-                <RadioGroup
-                  value={selectedColor}
-                  onChange={setSelectedColor}
-                  className="mt-4"
-                >
-                  <RadioGroup.Label className="sr-only">
-                    Choose a color
-                  </RadioGroup.Label>
-                  <div className="flex items-center space-x-3">
-                    {product.colors.map((color) => (
-                      <RadioGroup.Option
-                        key={color.name}
-                        value={color}
-                        className={({ active, checked }) =>
-                          classNames(
-                            color.selectedClass,
-                            active && checked ? "ring ring-offset-1" : "",
-                            !active && checked ? "ring-2" : "",
-                            "-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none"
-                          )
-                        }
-                      >
-                        <RadioGroup.Label as="span" className="sr-only">
-                          {color.name}
-                        </RadioGroup.Label>
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            color.class,
-                            "h-8 w-8 border border-black border-opacity-10 rounded-full"
-                          )}
-                        />
-                      </RadioGroup.Option>
-                    ))}
-                  </div>
-                </RadioGroup>
-              </div>
-
-              {/* Sizes */}
-              <div className="mt-10">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm text-gray-900 font-medium">Size</h3>
-                  <a
-                    href="/"
-                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                  <svg
+                    width="6px"
+                    height="6px"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    Size guide
-                  </a>
+                    <circle cx="3" cy="3" r="3" fill="#DBDBDB" />
+                  </svg>
+
+                  <span className="text-green-500">Verified</span>
                 </div>
-
-                <RadioGroup
-                  value={selectedSize}
-                  onChange={setSelectedSize}
-                  className="mt-4"
-                >
-                  <RadioGroup.Label className="sr-only">
-                    Choose a size
-                  </RadioGroup.Label>
-                  <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                    {product.sizes.map((size) => (
-                      <RadioGroup.Option
-                        key={size.name}
-                        value={size}
-                        disabled={!size.inStock}
-                        className={({ active }) =>
-                          classNames(
-                            size.inStock
-                              ? "bg-white shadow-sm text-gray-900 cursor-pointer"
-                              : "bg-gray-50 text-gray-200 cursor-not-allowed",
-                            active ? "ring-2 ring-indigo-500" : "",
-                            "group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
-                          )
-                        }
-                      >
-                        {({ active, checked }) => (
-                          <>
-                            <RadioGroup.Label as="span">
-                              {size.name}
-                            </RadioGroup.Label>
-                            {size.inStock ? (
-                              <span
-                                className={classNames(
-                                  active ? "border" : "border-2",
-                                  checked
-                                    ? "border-indigo-500"
-                                    : "border-transparent",
-                                  "absolute -inset-px rounded-md pointer-events-none"
-                                )}
-                                aria-hidden="true"
-                              />
-                            ) : (
-                              <span
-                                aria-hidden="true"
-                                className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
-                              >
-                                <svg
-                                  className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
-                                  viewBox="0 0 100 100"
-                                  preserveAspectRatio="none"
-                                  stroke="currentColor"
-                                >
-                                  <line
-                                    x1={0}
-                                    y1={100}
-                                    x2={100}
-                                    y2={0}
-                                    vectorEffect="non-scaling-stroke"
-                                  />
-                                </svg>
-                              </span>
-                            )}
-                          </>
-                        )}
-                      </RadioGroup.Option>
-                    ))}
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <button
-                type="submit"
-                className="mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Add to bag
-              </button>
-            </form>
-          </div>
-
-          <div className="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            {/* Description and details */}
-            <div>
-              <h3 className="sr-only">Description</h3>
-
-              <div className="space-y-6">
-                <p className="text-base text-gray-900">
-                  {products.description}
+                <p className="mb-4 font-semibold text-xl">
+                  ₹ {products.sellprice}
+                  <span className="text-xs font-normal text-gray-500 ml-1 text-ellipsis line-through">
+                    {" "}
+                    {`₹ ${products.price}`}
+                  </span>
+                  <span className="mx-3">
+                    {`${((products.sellprice / products.price) * 100).toFixed(
+                      2
+                    )} % off`}
+                  </span>
                 </p>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
-
-              <div className="mt-4">
-                <ul role="list" className="pl-4 list-disc text-sm space-y-2">
-                  {product.highlights.map((highlight) => (
-                    <li key={highlight} className="text-gray-400">
-                      <span className="text-gray-600">{highlight}</span>
-                    </li>
-                  ))}
+                <p className="mb-4 text-gray-500">{products.description}</p>
+                <ul className="mb-5">
+                  <li className="mb-1">
+                    {" "}
+                    <b className="font-medium w-36 inline-block">Category:</b>
+                    <span className="text-gray-500">{""}</span>
+                  </li>
+                  <li className="mb-1">
+                    {" "}
+                    <b className="font-medium w-36 inline-block">Size:</b>
+                    <span className="text-gray-500">{products.size}</span>
+                  </li>
+                  <li className="mb-1">
+                    {" "}
+                    <b className="font-medium w-36 inline-block">Delivery:</b>
+                    <span className="text-gray-500">All Over India</span>
+                  </li>
+                  <li className="mb-1">
+                    {" "}
+                    <b className="font-medium w-36 inline-block">Finish:</b>
+                    <span className="text-gray-500">{products.finish}</span>
+                  </li>
                 </ul>
-              </div>
-            </div>
 
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Details</h2>
+                <hr />
+                <div className="flex flex-wrap gap-3 mt-4">
+                  <Link
+                    className="px-4 py-2 inline-flex text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600"
+                    to="/"
+                  >
+                    Buy now
+                  </Link>
 
-              <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{products.price}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                  <Link
+                    className="px-4 py-2 inline-flex align-middle items-center text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                    to="#"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingCartIcon className="h-5 w-5 mr-2" />
+                    Add to cart
+                  </Link>
+
+                  <Link
+                    className="px-4 py-2 inline-flex align-middle items-center text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100"
+                    to="/"
+                  >
+                    <HeartIcon className="h-5 w-5 mr-2" />
+                    Save for later
+                  </Link>
+                </div>
+              </main>
+            </div>{" "}
+          </div>{" "}
+        </div>{" "}
+      </section>
+      <RelatedItem related={related} product={products} />
+    </>
   );
 };
 

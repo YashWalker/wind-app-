@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
 
-const CategoryCreate = () => {
+const CategoryCreate = ({setProgress}) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [name, setName] = useState("");
@@ -29,13 +29,18 @@ const CategoryCreate = () => {
     e.preventDefault();
     // console.log(name);
     setLoading(true);
+    setProgress(20);
+
     createCategory({ name }, user.token)
       .then((res) => {
         // console.log(res)
+        setProgress(50);
         setLoading(false);
+
         setName("");
         toast.success(`"${res.data.name}" is created`);
         loadCategories();
+        setProgress(100);
       })
       .catch((err) => {
         console.log(err);
