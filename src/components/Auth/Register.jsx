@@ -4,6 +4,7 @@ import { auth } from "../../firebase";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { sendSignInLinkToEmail } from "firebase/auth";
+import Footer from "../Navbar/Footer";
 
 const Register = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ const Register = ({ history }) => {
   };
   return (
     <>
-      <div className="container mx-auto">
+      <div className="container mx-auto ">
         <div className="flex justify-center px-6 my-12">
           <div className="shadow-md shadow-amber-700 w-full xl:w-3/4 lg:w-11/12 flex">
             {/* <!-- Col --> */}
@@ -47,6 +48,69 @@ const Register = ({ history }) => {
             <div className="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
               <h3 className="pt-4 text-2xl text-center">Create an Account!</h3>
               <form
+                className="px-8 pt-6 pb-8 mb-4 bg-white rounded"
+                onSubmit={handleSubmit}
+              >
+                <div className="mb-4">
+                  <label
+                    className="block mb-2 text-sm font-bold text-gray-700"
+                    htmlFor="username"
+                  >
+                    Email
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    type="email"
+                    placeholder="Your Email Address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                {/* <div className="mb-4">
+                    <label
+                      className="block mb-2 text-sm font-bold text-gray-700"
+                      htmlFor="password"
+                    >
+                      Password
+                    </label>
+                    <input
+                      className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border  rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                      type="password"
+                      placeholder="Your Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div> */}
+
+                <div className="mb-6 text-center">
+                  <button
+                    className="w-full px-4 py-2 font-bold text-bistre hover:text-white bg-orangepeel  rounded-lg "
+                    type="submit"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+                <hr className="mb-6 border-t" />
+
+                <hr className="mb-6 border-t" />
+                <div className="text-center">
+                  <Link
+                    className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    to="/login"
+                  >
+                    Already Have an Account!
+                  </Link>
+                </div>
+                <div className="text-center">
+                  <Link
+                    className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    to="/forgotPassword"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+              </form>
+              {/* <form
                 className="px-8 pt-6 pb-8 mb-4 bg-white rounded"
                 onSubmit={handleSubmit}
               >
@@ -154,10 +218,13 @@ const Register = ({ history }) => {
                     Already have an account? Login!
                   </Link>
                 </div>
-              </form>
+              </form> */}
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-32">
+        <Footer />
       </div>
     </>
   );

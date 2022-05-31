@@ -5,6 +5,7 @@ import { auth, googleAuthProvider } from "../../firebase";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import Footer from "../Navbar/Footer";
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -206,6 +207,9 @@ const Login = ({ history }) => {
           </div>
         </div>
       </main>
+      <div className="mt-32">
+        <Footer />
+      </div>
     </>
   );
 };

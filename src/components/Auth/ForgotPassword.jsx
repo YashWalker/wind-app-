@@ -1,9 +1,10 @@
-import React, { useState ,useEffect} from "react";
-import { Link , useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { toast } from "react-toastify";
-import { useSelector} from "react-redux"
+import { useSelector } from "react-redux";
+import Footer from "../Navbar/Footer";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,6 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
 
     const config = {
       url: process.env.REACT_APP_FORGOT_PASSWORD_REDIRECT,
@@ -112,6 +112,9 @@ const ForgotPassword = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-32">
+        <Footer />
       </div>
     </>
   );

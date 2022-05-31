@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { signInWithEmailLink, updatePassword } from "firebase/auth";
 import { createOrUpdateUser } from "../../functions/auth";
 import { useSelector, useDispatch } from "react-redux";
+import Footer from "../Navbar/Footer";
 
 const CompleteSignup = () => {
   const [email, setEmail] = useState("");
@@ -165,6 +166,9 @@ const CompleteSignup = () => {
             </form>
           </div>
         </div>
+      </div>
+      <div className="mt-32">
+        <Footer />
       </div>
     </>
   );

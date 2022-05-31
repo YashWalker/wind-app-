@@ -12,7 +12,7 @@ const CheckOut = () => {
 
   useEffect(() => {
     getUserCart(user.token).then((res) => {
-      console.log("user cart res", JSON.stringify(res.data, null, 4));
+      console.log("user cart res", JSON.stringify(res.data, null, 5));
       setProducts(res.data.products);
       setTotal(res.data.cartTotal);
     });
@@ -27,34 +27,34 @@ const CheckOut = () => {
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 lg:gap-8">
             <main className="md:w-2/3">
-              <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
-                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
-                  <div className="mb-4 lg:mb-0">
-                    <h3 className="text-xl font-semibold">Have an account?</h3>
-                    <p className="text-gray-600">
-                      By creating account you will get more benefits
-                    </p>
-                  </div>
-                  <div className="mx-2">
-                    <Link
-                      className="px-4 py-2 inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
-                      to="/login"
-                    >
-                      Sign in
-                    </Link>
+              {/* <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
+                  <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
+                    <div className="mb-4 lg:mb-0">
+                      <h3 className="text-xl font-semibold">Have an account?</h3>
+                      <p className="text-gray-600">
+                        By creating account you will get more benefits
+                      </p>
+                    </div>
+                    <div className="mx-2">
+                      <Link
+                        className="px-4 py-2 inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
+                        to="/login"
+                      >
+                        Sign in
+                      </Link>
 
-                    <Link
-                      className="px-4 py-2 inline-block text-white bg-blue-600 shadow-sm border border-transparent rounded-md hover:bg-blue-700"
-                      to="/signup"
-                    >
-                      Create account
-                    </Link>
+                      <Link
+                        className="px-4 py-2 inline-block text-white bg-blue-600 shadow-sm border border-transparent rounded-md hover:bg-blue-700"
+                        to="/signup"
+                      >
+                        Create account
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </article> */}
 
               <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
-                <h2 className="text-xl font-semibold mb-5">Guest checkout</h2>
+                <h2 className="text-xl font-semibold mb-5"> Checkout </h2>
 
                 <div className="grid grid-cols-2 gap-x-3">
                   <div className="mb-4">
@@ -84,7 +84,7 @@ const CheckOut = () => {
                         className="appearance-none w-24 border border-gray-200 bg-gray-100 rounded-tl-md rounded-bl-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
                         type="text"
                         placeholder="Code"
-                        value="+998"
+                        value="+91"
                       />
                       <input
                         className="appearance-none flex-1 border border-gray-200 bg-gray-100 rounded-tr-md rounded-br-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
@@ -105,12 +105,7 @@ const CheckOut = () => {
                 </div>
 
                 <label className="flex items-center w-max my-4">
-                  <input
-                    checked=""
-                    name=""
-                    type="checkbox"
-                    className="h-4 w-4"
-                  />
+                  <input name="" type="checkbox" className="h-4 w-4" required />
                   <span className="ml-2 inline-block text-gray-500">
                     {" "}
                     I agree with Terms and Conditions{" "}
@@ -123,53 +118,53 @@ const CheckOut = () => {
                   Shipping information
                 </h2>
 
-                <div className="grid sm:grid-cols-3 gap-3 mb-6">
-                  <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
-                    <span>
-                      <input
-                        name="shipping"
-                        type="radio"
-                        className="h-4 w-4 mt-1"
-                      />
-                    </span>
-                    <p className="ml-2">
-                      <span>Express delivery</span>
-                      <small className="block text-sm text-gray-400">
-                        3-4 days via Fedex
-                      </small>
-                    </p>
-                  </label>
-                  <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
-                    <span>
-                      <input
-                        name="shipping"
-                        type="radio"
-                        className="h-4 w-4 mt-1"
-                      />
-                    </span>
-                    <p className="ml-2">
-                      <span>Post office</span>
-                      <small className="block text-sm text-gray-400">
-                        20-30 days via post
-                      </small>
-                    </p>
-                  </label>
-                  <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
-                    <span>
-                      <input
-                        name="shipping"
-                        type="radio"
-                        className="h-4 w-4 mt-1"
-                      />
-                    </span>
-                    <p className="ml-2">
-                      <span>Self pick-up</span>
-                      <small className="block text-sm text-gray-400">
-                        Nearest location
-                      </small>
-                    </p>
-                  </label>
-                </div>
+                {/* <div className="grid sm:grid-cols-3 gap-3 mb-6">
+                <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
+                  <span>
+                    <input
+                      name="shipping"
+                      type="radio"
+                      className="h-4 w-4 mt-1"
+                    />
+                  </span>
+                  <p className="ml-2">
+                    <span>Express delivery</span>
+                    <small className="block text-sm text-gray-400">
+                      3-4 days via Fede
+                    </small>
+                  </p>
+                </label>
+                <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
+                  <span>
+                    <input
+                      name="shipping"
+                      type="radio"
+                      className="h-4 w-4 mt-1"
+                    />
+                  </span>
+                  <p className="ml-2">
+                    <span>Post office</span>
+                    <small className="block text-sm text-gray-400">
+                      20-30 days via post
+                    </small>
+                  </p>
+                </label>
+                <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
+                  <span>
+                    <input
+                      name="shipping"
+                      type="radio"
+                      className="h-4 w-4 mt-1"
+                    />
+                  </span>
+                  <p className="ml-2">
+                    <span>Self pick-up</span>
+                    <small className="block text-sm text-gray-400">
+                      Nearest location
+                    </small>
+                  </p>
+                </label>
+              </div> */}
 
                 <div className="grid md:grid-cols-3 gap-x-3">
                   <div className="mb-4 md:col-span-2">
@@ -185,9 +180,9 @@ const CheckOut = () => {
                     <label className="block mb-1"> City* </label>
                     <div className="relative">
                       <select className="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full">
-                        <option>Select here</option>
-                        <option>Second option</option>
-                        <option>Third option</option>
+                        <option>Jaipur</option>
+                        <option>Pune</option>
+                        <option>New Delhi</option>
                       </select>
                       <i className="absolute inset-y-0 right-0 p-2 text-gray-400">
                         <svg
@@ -241,12 +236,7 @@ const CheckOut = () => {
                 </div>
 
                 <label className="flex items-center w-max my-4">
-                  <input
-                    checked=""
-                    name=""
-                    type="checkbox"
-                    className="h-4 w-4"
-                  />
+                  <input name="" type="checkbox" className="h-4 w-4" />
                   <span className="ml-2 inline-block text-gray-500">
                     {" "}
                     Save my information for future purchase{" "}
@@ -277,11 +267,11 @@ const CheckOut = () => {
                 <ul>
                   <li className="flex justify-between mb-1">
                     <span>Base price:</span>
-                    <span>₹ {total * (0.82).toFixed(2)}</span>
+                    <span>₹ {total * (0.82).toFixed(1)}</span>
                   </li>
                   <li className="flex justify-between mb-1">
                     <span>Discount:</span>
-                    <span className="text-green-500">- $60.00</span>
+                    <span className="text-green-500">- </span>
                   </li>
                   <li className="flex justify-between mb-1">
                     <span>GST:</span>
@@ -324,8 +314,8 @@ const CheckOut = () => {
                           src={p.product.images?.[0].url}
                           alt={p.product.title}
                         />
-                        <span className="absolute -top-2 -right-2 w-6 h-6 text-sm text-center flex items-center justify-center text-white bg-gray-400 rounded-full">
-                          {p.product.count}
+                        <span className="absolute -top-2 -right-2 w-6 h-6 text-sm text-center flex items-center justify-center text-white bg-green-600 rounded-full">
+                          {p.count}
                         </span>
                       </div>
                     </div>
@@ -334,7 +324,10 @@ const CheckOut = () => {
                         {" "}
                         {p.product.title} <br /> {p.product.finish}
                       </p>
-                      <p className="mt-1 text-gray-400"> Total: {total} </p>
+                      <p className="mt-1 text-gray-400">
+                        {" "}
+                        Price: ₹ {p.product.sellprice * p.count}{" "}
+                      </p>
                     </figcaption>
                   </figure>
                 ))}
