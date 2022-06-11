@@ -4,14 +4,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import CartItems from "../components/Cart/CartItems";
-import { userCart } from "../functions/user";
+import { userCart , applyCoupon, getUserCart } from "../functions/user";
 
 const Cart = () => {
-  const [coupon, setCoupon] = useState("Coupon");
+ 
+
+
 
   const { cart, user } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
   let navigate = useNavigate();
+
+  
+  
 
   const getTotal = () => {
     return cart.reduce((currentValue, nextValue) => {
@@ -31,6 +36,8 @@ const Cart = () => {
       .catch((err) => console.log("cart save err", err));
   };
 
+  
+
   return (
     <>
       <div className="flex justify-center my-6">
@@ -38,7 +45,7 @@ const Cart = () => {
           {!cart.length ? (
             <p className="text-center">
               No products in cart.{" "}
-              <Link className="font-semibold text-bistre" to="/shop">
+              <Link className="font-semibold text-bistre" to="/">
                 Continue Shopping.
               </Link>
             </p>
@@ -72,28 +79,28 @@ const Cart = () => {
               <hr className="pb-6 mt-6" />
               <div className="my-4 mt-6 -mx-2 lg:flex">
                 <div className="lg:px-2 lg:w-1/2">
-                  <div className="p-4 bg-gray-100 rounded-full">
+                  {/* <div className="p-4 bg-gray-100 rounded-md">
                     <h1 className="ml-2 font-bold uppercase">Coupon Code</h1>
-                  </div>
-                  <div className="p-4">
+                  </div> */}
+                  {/* <div className="p-4">
                     <p className="mb-4 italic">
                       If you have a coupon code, please enter it in the box
                       below
                     </p>
-                    <div className="justify-center md:flex">
-                      <form>
-                        <div className="flex items-center w-full h-13 pl-3 bg-white bg-gray-100 border rounded-full">
+                    <div className="justify-center md:flex flex-col">
+                      
+                        <div className="flex items-center w-full h-13 pl-3  bg-gray-100 border rounded-md">
                           <input
-                            type="coupon"
-                            name="code"
-                            id="coupon"
+                            type="text"
                             placeholder="Apply coupon"
-                            value="90off"
+                            value={coupons}
+                            onChange={(e)=>{setCoupons(e.target.value); setDiscountError("")}}
                             className="w-full bg-gray-100 outline-none appearance-none focus:outline-none active:outline-none"
                           />
                           <button
-                            type="submit"
-                            className="text-sm flex items-center px-3 py-1 text-white bg-gray-800 rounded-full outline-none md:px-4 hover:bg-gray-700 focus:outline-none active:outline-none"
+                            
+                            onClick={handleApplyCoupon}
+                            className="text-sm flex items-center px-3 py-1 text-white bg-amber-800 rounded-md outline-none md:px-4 hover:bg-amber-900 focus:outline-none active:outline-none"
                           >
                             <svg
                               aria-hidden="true"
@@ -110,11 +117,13 @@ const Cart = () => {
                             </svg>
                             <span className="font-medium">Apply coupon</span>
                           </button>
+                          
                         </div>
-                      </form>
+                     
+                      {discountError && <span className="font-light ">Status:{discountError}</span>}
                     </div>
-                  </div>
-                  <div className="p-4 mt-6 bg-gray-100 rounded-full">
+                  </div> */}
+                  <div className="p-4  bg-gray-100 rounded-md">
                     <h1 className="ml-2 font-bold uppercase">
                       Instruction for seller
                     </h1>
@@ -128,12 +137,12 @@ const Cart = () => {
                   </div>
                 </div>
                 <div className="lg:px-2 lg:w-1/2">
-                  <div className="p-4 bg-gray-100 rounded-full">
+                  <div className="p-4 bg-gray-100 rounded-md">
                     <h1 className="ml-2 font-bold uppercase">Order Details</h1>
                   </div>
                   <div className="p-4">
                     <p className="mb-6 italic">
-                      Shipping and additionnal costs are calculated based on
+                      Shipping and additional costs are calculated based on
                       values you have entered
                     </p>
                     <div className="flex justify-between border-b">
@@ -144,12 +153,12 @@ const Cart = () => {
                         {`₹ ${(getTotal() * 0.82).toFixed(2)}`}
                       </div>
                     </div>
-                    <div className="flex justify-between pt-4 border-b">
+                    {/* <div className="flex justify-between pt-4 border-b">
                       <div className="flex lg:px-4 lg:py-2 m-2 text-lg lg:text-xl font-bold text-gray-800">
-                        {!coupon ? "No Coupon Applied" : "Coupon Applied"}
+                        {!discount ? "No Coupon Applied" : "Coupon Applied"}
                       </div>
                       <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-green-700">
-                        {""}
+                        {discount}
                       </div>
                     </div>
                     <div className="flex justify-between pt-4 border-b">
@@ -157,9 +166,9 @@ const Cart = () => {
                         New Subtotal
                       </div>
                       <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                        {"No New Discount"}
+                        {discount}
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex justify-between pt-4 border-b">
                       <div className="lg:px-4 lg:py-2 m-2 text-lg lg:text-xl font-bold text-center text-gray-800">
                         GST{" "}

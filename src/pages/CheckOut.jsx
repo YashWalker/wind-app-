@@ -1,22 +1,94 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserCart } from "../functions/user";
+import { getUserCart , emptyUserCart , applyCoupon} from "../functions/user";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const CheckOut = () => {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
+  const [coupon, setCoupon] = useState("");
+  // discount price
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
+  const [discountError, setDiscountError] = useState("");
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
+  const couponTrueOrFalse = useSelector((state) => state.coupon);
+
+
+  // useEffect(() => {
+  //   getUserCart(user.token).then((res) => {
+  //     console.log("user cart res", JSON.stringify(res.data, null, 5));
+  //     setProducts(res.data.products);
+  //     setTotal(res.data.cartTotal);
+  //   });
+  // }, []);
 
   useEffect(() => {
-    getUserCart(user.token).then((res) => {
-      console.log("user cart res", JSON.stringify(res.data, null, 5));
-      setProducts(res.data.products);
-      setTotal(res.data.cartTotal);
+    if (user && user.token) {
+      getUserCart(user.token).then((res) => {
+        console.log("user cart res", JSON.stringify(res.data, null, 4));
+        setProducts(res.data.products);
+        setTotal(res.data.cartTotal);
+      });
+    }
+  }, [user]);
+
+
+  const emptyCart = () => {
+    // remove from local storage
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("cart");
+    }
+    // remove from redux
+    dispatch({
+      type: "ADD_TO_CART",
+      payload: [],
     });
-  }, []);
+    // remove from backend
+    emptyUserCart(user.token).then((res) => {
+      setProducts([]);
+      setTotal(0);
+      setTotalAfterDiscount(0);
+      setCoupon("");
+      toast.success("Cart is empty. Continue shopping.");
+    });
+  };
+
+  
+  const applyDiscountCoupon = () => {
+    console.log("send coupon to backend", coupon);
+    applyCoupon(user.token, coupon).then((res) => {
+      console.log("RES ON COUPON APPLIED", res.data);
+      if (res.data) {
+        setTotalAfterDiscount(res.data);
+        // update redux coupon applied true/false
+        dispatch({
+          type: "COUPON_APPLIED",
+          payload: true,
+        });
+      }
+      // error
+      // else  {
+      //   setDiscountError("Invalid Coupon");
+      //   // update redux coupon applied true/false
+      //   dispatch({
+      //     type: "COUPON_APPLIED",
+      //     payload: false,
+      //   });
+      // }
+    }).catch((err)=> {
+      setDiscountError("Invalid Coupon");
+      toast.error(err)
+      // update redux coupon applied true/false
+      dispatch({
+        type: "COUPON_APPLIED",
+        payload: false,
+      });
+    });
+  };
+
 
   const saveAddressToDb = () => {
     //
@@ -267,19 +339,21 @@ const CheckOut = () => {
                 <ul>
                   <li className="flex justify-between mb-1">
                     <span>Base price:</span>
-                    <span>₹ {total * (0.82).toFixed(1)}</span>
-                  </li>
-                  <li className="flex justify-between mb-1">
-                    <span>Discount:</span>
-                    <span className="text-green-500">- </span>
+                    <span>₹ {total * (0.82).toFixed(2)}</span>
                   </li>
                   <li className="flex justify-between mb-1">
                     <span>GST:</span>
                     <span>₹ {total * (0.18).toFixed(2)}</span>
                   </li>
+                  <li className="flex justify-between mb-1">
+                    <span>Discount:</span>
+                    <span className="text-green-500"> - {!totalAfterDiscount ? ("0") :(`${total-totalAfterDiscount}`)} </span>
+                    {discountError ? (<span className="p-2">Invalid Coupon</span>): ""}
+                  </li>
+                  
                   <li className="border-t flex justify-between mt-3 pt-3">
                     <span>Total price:</span>
-                    <span className="text-gray-900 font-bold">₹{total}</span>
+                    <span className="text-gray-900 font-bold">₹ {!totalAfterDiscount ? (`${total}`):(`${totalAfterDiscount}`)}</span>
                   </li>
                 </ul>
 
@@ -290,17 +364,24 @@ const CheckOut = () => {
                     className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                     type="text"
                     placeholder="Coupon code"
+                    onChange={(e) => {
+                      setCoupon(e.target.value);
+                      setDiscountError("");
+                    }}
+                    value={coupon}
+                    
                   />
                   <button
                     type="button"
+                    onClick={applyDiscountCoupon}
                     className="px-4 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
                   >
                     {" "}
                     Apply{" "}
                   </button>
                 </div>
-
                 <hr className="my-4" />
+                
 
                 <h2 className="text-lg font-semibold mb-3">Items in cart</h2>
 
@@ -331,6 +412,10 @@ const CheckOut = () => {
                     </figcaption>
                   </figure>
                 ))}
+                <hr className="my-4" />
+
+                <button className=" px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900 " onClick={emptyCart}>Empty Cart</button>
+
               </article>
             </aside>
           </div>

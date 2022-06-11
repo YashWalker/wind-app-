@@ -85,7 +85,7 @@ const CartItems = ({ c }) => {
               onChange={handleCount}
               type="number"
               value={c.count}
-              className="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black focus:text-black"
+              className="w-full font-semibold text-center rounded-md text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black focus:text-black"
             />
           </div>
         </div>
