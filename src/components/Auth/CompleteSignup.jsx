@@ -138,7 +138,7 @@ const CompleteSignup = () => {
               </div>
               <div className="mb-6 text-center">
                 <button
-                  className="w-full px-4 py-2 font-bold text-bistre hover:text-white bg-orangepeel  rounded-lg "
+                  className="w-full px-4 py-2 font-bold text-white hover:bg-amber-900 bg-amber-800  rounded-lg "
                   type="submit"
                 >
                   Sign In
@@ -149,7 +149,7 @@ const CompleteSignup = () => {
               <hr className="mb-6 border-t" />
               <div className="text-center">
                 <Link
-                  className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                  className="inline-block text-sm align-baseline hover:text-amber-900 text-amber-800"
                   to="/signup"
                 >
                   Create an Account!
@@ -157,7 +157,7 @@ const CompleteSignup = () => {
               </div>
               <div className="text-center">
                 <Link
-                  className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                  className="inline-block text-sm align-baseline hover:text-amber-900 text-amber-800"
                   to="/forgotPassword"
                 >
                   Forgot Password?

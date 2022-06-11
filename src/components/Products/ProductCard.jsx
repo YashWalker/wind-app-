@@ -109,7 +109,7 @@ const ProductCard = ({ product }) => {
 
         <button
           onClick={handleAddToCart}
-          className="p-2 px-6 bg-purple-500 text-white rounded-md hover:bg-purple-600"
+          className="p-2 px-6 bg-amber-800 text-white rounded-md hover:bg-amber-900"
         >
           Add To Cart
         </button>

@@ -135,7 +135,7 @@ export default function Example({ c }) {
                             });
                           }}
                           to="/cart"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                          className="flex items-center justify-center rounded-md border border-transparent bg-amber-800 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-900"
                         >
                           Go to Cart
                         </Link>
@@ -149,7 +149,7 @@ export default function Example({ c }) {
                               payload: false,
                             });
                           }}
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                          className="flex items-center justify-center rounded-md border border-transparent bg-amber-800 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-900"
                         >
                           Login to Checkout
                         </Link>
@@ -160,7 +160,7 @@ export default function Example({ c }) {
                         or{" "}
                         <button
                           type="button"
-                          className="font-medium text-indigo-600 hover:text-indigo-500"
+                          className="font-medium text-amber-800 hover:text-amber-900"
                           onClick={() => {
                             dispatch({
                               type: "SET_VISIBLE",

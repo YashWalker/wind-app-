@@ -12,7 +12,7 @@ const FeatureProduct = () => {
                   Comfortable Cusion Chair
                 </h2>
                 <h3 className="text-xl">₹ 6400</h3>
-                <button className="p-2 px-6 bg-red-500 text-white rounded-md hover:bg-red-600">
+                <button className="p-2 px-6 bg-amber-800 text-white rounded-md hover:bg-amber-900">
                   Add To Cart
                 </button>
               </div>
@@ -23,7 +23,7 @@ const FeatureProduct = () => {
                   alt=""
                 />
               </div>
-            </article>
+            </article> 
           </section>
           <section className="row-start-5 row-end-7 col-start-1 col-end-4 bg-purple-300">
             <article className="flex items-center h-full bg-green-900  p-6">
@@ -42,7 +42,7 @@ const FeatureProduct = () => {
               <div className="space-y-5">
                 <h2 className="text-3xl max-w-xs">Multipurpose Wooden Tool</h2>
                 <h3 className="text-xl">$24</h3>
-                <button className="p-2 px-6 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                <button className="p-2 px-6 bg-amber-900 text-white rounded-md hover:bg-amber-900">
                   Add To Cart
                 </button>
               </div>
@@ -60,7 +60,7 @@ const FeatureProduct = () => {
               <div className="space-y-5">
                 <h2 className="text-2xl max-w-sm ">Comfortable Wooden Chair</h2>
                 <h3 className="text-xl">₹ 7900</h3>
-                <button className="p-2 px-6 bg-green-500 text-white rounded-md hover:bg-green-600">
+                <button className="p-2 px-6 bg-amber-900 text-white rounded-md hover:bg-amber-900">
                   Add To Cart
                 </button>
               </div>
@@ -80,7 +80,7 @@ const FeatureProduct = () => {
                   Multipurpose Wooden Trolly
                 </h2>
                 <h3 className="text-xl">₹ 3199</h3>
-                <button className="p-2 px-6 bg-purple-500 text-white rounded-md hover:bg-purple-600">
+                <button className="p-2 px-6 bg-amber-900 text-white rounded-md hover:bg-amber-900">
                   Add To Cart
                 </button>
               </div>

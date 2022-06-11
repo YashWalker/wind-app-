@@ -245,14 +245,14 @@ const CheckOut = () => {
 
                 <div className="flex justify-end space-x-2">
                   <Link
-                    className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
+                    className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-bistre"
                     to="/"
                   >
                     {" "}
                     Back to Home{" "}
                   </Link>
                   <Link
-                    className="px-5 py-2 inline-block text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700"
+                    className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
                     to="*"
                   >
                     {" "}

@@ -35,7 +35,7 @@ const Register = ({ history }) => {
     <>
       <div className="container mx-auto ">
         <div className="flex justify-center px-6 my-12">
-          <div className="shadow-md shadow-amber-700 w-full xl:w-3/4 lg:w-11/12 flex">
+          <div className="shadow-md  w-full xl:w-3/4 lg:w-11/12 flex">
             {/* <!-- Col --> */}
             <div
               className="w-full h-auto bg-gray-400 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
@@ -84,7 +84,7 @@ const Register = ({ history }) => {
 
                 <div className="mb-6 text-center">
                   <button
-                    className="w-full px-4 py-2 font-bold text-bistre hover:text-white bg-orangepeel  rounded-lg "
+                    className="w-full px-4 py-2 font-bold text-white hover:bg-amber-900 bg-amber-800  rounded-lg "
                     type="submit"
                   >
                     Sign Up
@@ -95,7 +95,7 @@ const Register = ({ history }) => {
                 <hr className="mb-6 border-t" />
                 <div className="text-center">
                   <Link
-                    className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    className="inline-block text-sm  hover:text-amber-900 text-amber-800 align-baseline "
                     to="/login"
                   >
                     Already Have an Account!
@@ -103,7 +103,7 @@ const Register = ({ history }) => {
                 </div>
                 <div className="text-center">
                   <Link
-                    className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    className="inline-block text-sm  align-baseline  hover:text-amber-900 text-amber-800"
                     to="/forgotPassword"
                   >
                     Forgot Password?

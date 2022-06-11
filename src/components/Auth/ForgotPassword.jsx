@@ -85,7 +85,7 @@ const ForgotPassword = () => {
                 </div>
                 <div className="mb-6 text-center">
                   <button
-                    className="w-full px-4 py-2 font-bold text-white bg-orangepeel rounded-md hover:bg-transparent hover:text-orangepeel hover:border-2 hover:border-orangepeel focus:outline-none focus:shadow-outline"
+                    className="w-full px-4 py-2 font-bold  rounded-md  focus:outline-none focus:shadow-outline text-white hover:bg-amber-900 bg-amber-800"
                     type="submit"
                   >
                     Reset Password
@@ -94,7 +94,7 @@ const ForgotPassword = () => {
                 <hr className="mb-6 border-t" />
                 <div className="text-center">
                   <Link
-                    className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    className="inline-block text-sm hover:text-amber-900 text-amber-800 align-baseline "
                     to="/Signup"
                   >
                     Create an Account!
@@ -102,7 +102,7 @@ const ForgotPassword = () => {
                 </div>
                 <div className="text-center">
                   <Link
-                    className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                    className="inline-block text-sm  align-baseline  hover:text-amber-900 text-amber-800"
                     to="/Login"
                   >
                     Already have an account? Login!

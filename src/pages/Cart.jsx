@@ -185,7 +185,7 @@ const Cart = () => {
                     {user ? (
                       <button
                         onClick={saveOrderToDb}
-                        className="flex justify-center w-full px-10 py-3 mt-6 font-medium p-2  bg-purple-500 text-white rounded-md hover:bg-purple-600 shadow item-center  focus:shadow-outline focus:outline-none"
+                        className="flex justify-center w-full px-10 py-3 mt-6 font-medium p-2   rounded-md text-white hover:bg-amber-900 bg-amber-800 shadow item-center  focus:shadow-outline focus:outline-none"
                       >
                         <svg
                           aria-hidden="true"
@@ -204,7 +204,7 @@ const Cart = () => {
                       </button>
                     ) : (
                       <Link to="/login" state={{ from: "/cart" }}>
-                        <button className="flex justify-center w-full px-10 py-3 mt-6 font-medium p-2  bg-purple-500 text-white rounded-md hover:bg-purple-600 shadow item-center  focus:shadow-outline focus:outline-none">
+                        <button className="flex justify-center w-full px-10 py-3 mt-6 font-medium p-2   rounded-md text-white hover:bg-amber-900 bg-amber-800 shadow item-center  focus:shadow-outline focus:outline-none">
                           <svg
                             aria-hidden="true"
                             data-prefix="far"

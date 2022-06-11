@@ -8,6 +8,7 @@ import {
 import { getCategories } from "../functions/category";
 import { getSubs } from "../functions/sub";
 import { useSelector, useDispatch } from "react-redux";
+import { HeartIcon } from "@heroicons/react/outline";
 
 // import Star from "../components/forms/Star";
 
@@ -251,22 +252,22 @@ const Furniture = () => {
                         <p className="font-semibold">₹ {p.sellprice}</p>
                         <Link
                           to={`/product/${p.slug}`}
-                          className="block text-gray-600 mb-3 hover:text-blue-500"
+                          className="block text-gray-600 mb-3 hover:text-bistre "
                         >
                           {p.title}
                         </Link>
-                        <div>
+                        <div className="flex">
                           <Link
-                            className="px-4 py-2 inline-block text-white text-center bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                            className="px-4 py-2 inline-block text-white text-center bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
                             to="#"
                           >
                             Add to cart
                           </Link>
                           <Link
-                            className="px-3 py-2 inline-block text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100"
+                            className="mx-3 px-3 py-2 inline-block text-red-700  border border-gray-300 rounded-md hover:bg-gray-100"
                             to="#"
                           >
-                            <i className="fa fa-heart"></i>
+                            <HeartIcon className="h-6 w-6 active:fill-red-700 "/>
                           </Link>
                         </div>
                       </div>
