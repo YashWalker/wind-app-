@@ -45,6 +45,13 @@ const AdminBar = () => {
               </Link>
               <Link
                 className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
+                to="/admin/coupon"
+              >
+                <span className="mx-4 text-lg font-normal">Coupon</span>
+                <span className="flex-grow text-right"></span>
+              </Link>
+              <Link
+                className="hover:text-gray-800 hover:bg-gray-100 flex items-center p-2 my-6 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200  text-gray-600 dark:text-gray-400 rounded-lg "
                 to="/admin/orders"
               >
                 <span className="mx-4 text-lg font-normal">New Orders</span>

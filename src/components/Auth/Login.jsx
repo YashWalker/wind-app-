@@ -72,7 +72,7 @@ const Login = ({ history }) => {
         .catch((err) => console.log(err));
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      
       setLoading(false);
     }
   };
@@ -101,7 +101,7 @@ const Login = ({ history }) => {
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err.message);
+        
       });
   };
 

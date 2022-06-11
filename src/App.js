@@ -34,6 +34,7 @@ import Furniture from "./pages/Furniture";
 import Cart from "./pages/Cart";
 import CheckOut from "./pages/CheckOut";
 import CartSlide from "./components/Cart/CartSlide";
+import Coupon from "./components/Admin/Coupon/Coupon";
 
 function App() {
   const [progress, setProgress] = useState(0);
@@ -117,6 +118,7 @@ function App() {
           ></Route>
           <Route exact path="sub/:slug" element={<SubUpdate />}></Route>
           <Route exact path="products" element={<ProductList />}></Route>
+          <Route exact path="coupon" element={<Coupon />}></Route>
           <Route
             exact
             path="products/:slug"
