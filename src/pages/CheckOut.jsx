@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Pincode from "react-pincode";
-import {HomeIcon, UserIcon} from "@heroicons/react/outline"
+import { HomeIcon, UserIcon } from "@heroicons/react/outline";
 
 const initialState = {
   firstName: "",
@@ -134,291 +134,309 @@ const CheckOut = () => {
       if (res.data.ok) {
         setAddressSaved(true);
         toast.success("Address saved");
-       
       }
     });
   };
 
-  
   return (
     <>
       <section className="py-10 bg-gray-50">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 lg:gap-8">
+            {user && user.address ? (
+               <main className="md:w-2/3">
+
+<article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
+                    <h2 className="text-xl font-semibold mb-5">
+                      {" "}
+                      Saved Address{" "}
+                    </h2>
+
+                    <figure class="flex items-start sm:items-center">
+                      <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
+                        <UserIcon className="w-8 h-8" />
+                      </span>
+                      <figcaption className="mx-2">
+                        <h5 class="font-semibold text-lg">
+                          {user.address.firstName + user.address.lastName}
+                        </h5>
+                        <p>
+                          Email:{" "}
+                          <Link to={`mailto:${user.email}`}>
+                            {user.address.email}
+                          </Link>{" "}
+                          | Phone: <Link to="tel:+91">+91-{user.address.phone}</Link>
+                        </p>
+                      </figcaption>
+                    </figure>
+
+                    <hr class="my-4" />
+
+                    <div class="sm:flex mb-5 gap-4">
+                      <figure class="md:w-1/2 flex items-center relative bg-gray-100 p-4 rounded-md">
+                        <div class="mr-3">
+                          <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
+                            <HomeIcon className="w-8 h-8" />
+                          </span>
+                        </div>
+                        <figcaption class="text-gray-600">
+                          <p>
+                            {" "}
+                            {user.address.local}, <br />
+                            {user.address.city}, {user.address.district},<br />
+                            {user.address.stateName}, {user.address.pin}
+                            <small class="text-gray-400 mx-2">(Primary)</small>
+                          </p>
+                        </figcaption>
+                      </figure>
+                    </div>
+                    <hr className="my-4" />
+                    <div className="flex justify-end space-x-2">
+                      <Link
+                        className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-bistre"
+                        to="/"
+                      >
+                        {" "}
+                        Back to Home{" "}
+                      </Link>
+                      <Link
+                        className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
+                        to="/payment"
+                      >
+                        {" "}
+                        Place Order{" "}
+                      </Link>
+                    </div>
+                  </article>
+
+                  </main>
+            ):(
+
+
+
+
+
+
+
+
+
+
+           
             <main className="md:w-2/3">
-              {/* <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
-                  <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
-                    <div className="mb-4 lg:mb-0">
-                      <h3 className="text-xl font-semibold">Have an account?</h3>
-                      <p className="text-gray-600">
-                        By creating account you will get more benefits
-                      </p>
-                    </div>
-                    <div className="mx-2">
-                      <Link
-                        className="px-4 py-2 inline-block text-blue-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-blue-600"
-                        to="/login"
-                      >
-                        Sign in
-                      </Link>
-
-                      <Link
-                        className="px-4 py-2 inline-block text-white bg-blue-600 shadow-sm border border-transparent rounded-md hover:bg-blue-700"
-                        to="/signup"
-                      >
-                        Create account
-                      </Link>
-                    </div>
-                  </div>
-                </article> */}
-              {addressSaved ? (<> <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
-                <h2 className="text-xl font-semibold mb-5"> Saved Address </h2>
-               
-              <figure class="flex items-start sm:items-center">
-              <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
-                      <UserIcon className="w-8 h-8"/>
-                    </span>
-                <figcaption className="mx-2">
-                  <h5 class="font-semibold text-lg">
-                    {address.firstName + address.lastName}
-                  </h5>
-                  <p>
-                    Email: <Link to={`mailto:${user.email}`}>{address.email}</Link>{" "}
-                    | Phone: <Link to="tel:+91">+91-{address.phone}</Link>
-                  </p>
-                </figcaption>
-              </figure>
-
-              <hr class="my-4" />
-
-              <div class="sm:flex mb-5 gap-4">
-                <figure class="md:w-1/2 flex items-center relative bg-gray-100 p-4 rounded-md">
-                  <div class="mr-3">
-                    <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
-                      <HomeIcon className="w-8 h-8"/>
-                    </span>
-                  </div>
-                  <figcaption class="text-gray-600">
-                    <p>
+              {addressSaved ? (
+                <>
+                  {" "}
+                  <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
+                    <h2 className="text-xl font-semibold mb-5">
                       {" "}
-                      {address.local}, <br/>{address.city}, {address.district},<br/>{address.stateName}, {address.pin} 
-                      <small class="text-gray-400 mx-2">(Primary)</small>
-                    </p>
-                  </figcaption>
-                </figure>
-               
-              </div>
-              <hr className="my-4"/>
-              <div className="flex justify-end space-x-2">
-                  <Link
-                    className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-bistre"
-                    to="/"
-                  >
-                    {" "}
-                    Back to Home{" "}
-                  </Link>
-                  <button
-                    className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
-                    to="/payment"
-                  >
-                    {" "}
-                    Place Order{" "}
-                  </button>
-                </div>
-             
-                
-              </article></>):(
-              <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
-                <h2 className="text-xl font-semibold mb-5"> Checkout </h2>
-                
-                <div className="grid grid-cols-2 gap-x-3">
-                  <div className="mb-4">
-                    <label className="block mb-1"> First name </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="text"
-                      placeholder="Type here"
-                      onChange={addAddress}
-                      name="firstName"
-                      value={firstName}
-                    />
-                  </div>
+                      Saved Address{" "}
+                    </h2>
 
-                  <div className="mb-4">
-                    <label className="block mb-1"> Last name </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="text"
-                      placeholder="Type here"
-                      onChange={addAddress}
-                      name="lastName"
-                      value={lastName}
-                    />
-                  </div>
-                </div>
+                    <figure class="flex items-start sm:items-center">
+                      <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
+                        <UserIcon className="w-8 h-8" />
+                      </span>
+                      <figcaption className="mx-2">
+                        <h5 class="font-semibold text-lg">
+                          {address.firstName + address.lastName}
+                        </h5>
+                        <p>
+                          Email:{" "}
+                          <Link to={`mailto:${user.email}`}>
+                            {address.email}
+                          </Link>{" "}
+                          | Phone: <Link to="tel:+91">+91-{address.phone}</Link>
+                        </p>
+                      </figcaption>
+                    </figure>
 
-                <div className="grid lg:grid-cols-2 gap-x-3">
-                  <div className="mb-4">
-                    <label className="block mb-1"> Phone </label>
-                    <div className="flex  w-full">
+                    <hr class="my-4" />
+
+                    <div class="sm:flex mb-5 gap-4">
+                      <figure class="md:w-1/2 flex items-center relative bg-gray-100 p-4 rounded-md">
+                        <div class="mr-3">
+                          <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
+                            <HomeIcon className="w-8 h-8" />
+                          </span>
+                        </div>
+                        <figcaption class="text-gray-600">
+                          <p>
+                            {" "}
+                            {address.local}, <br />
+                            {address.city}, {address.district},<br />
+                            {address.stateName}, {address.pin}
+                            <small class="text-gray-400 mx-2">(Primary)</small>
+                          </p>
+                        </figcaption>
+                      </figure>
+                    </div>
+                    <hr className="my-4" />
+                    <div className="flex justify-end space-x-2">
+                      <Link
+                        className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-bistre"
+                        to="/"
+                      >
+                        {" "}
+                        Back to Home{" "}
+                      </Link>
+                      <Link
+                        className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
+                        to="/payment"
+                      >
+                        {" "}
+                        Place Order{" "}
+                      </Link>
+                    </div>
+                  </article>
+                </>
+              ) : (
+                <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
+                  <h2 className="text-xl font-semibold mb-5"> Checkout </h2>
+
+                  <div className="grid grid-cols-2 gap-x-3">
+                    <div className="mb-4">
+                      <label className="block mb-1"> First name </label>
                       <input
-                        className="appearance-none w-24 border border-gray-200 bg-gray-100 rounded-tl-md rounded-bl-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                         type="text"
-                        placeholder="Code"
-                        value="+91"
-                      />
-                      <input
-                        className="appearance-none flex-1 border border-gray-200 bg-gray-100 rounded-tr-md rounded-br-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
-                        type="text"
-                        placeholder="Type phone"
+                        placeholder="Type here"
                         onChange={addAddress}
-                        name="phone"
-                        value={phone}
+                        name="firstName"
+                        value={firstName}
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block mb-1"> Last name </label>
+                      <input
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        type="text"
+                        placeholder="Type here"
+                        onChange={addAddress}
+                        name="lastName"
+                        value={lastName}
                       />
                     </div>
                   </div>
 
-                  <div className="mb-4">
-                    <label className="block mb-1"> Email </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="email"
-                      placeholder="Type here"
-                      onChange={addAddress}
-                      name="email"
-                      value={email}
-                    />
+                  <div className="grid lg:grid-cols-2 gap-x-3">
+                    <div className="mb-4">
+                      <label className="block mb-1"> Phone </label>
+                      <div className="flex  w-full">
+                        <input
+                          className="appearance-none w-24 border border-gray-200 bg-gray-100 rounded-tl-md rounded-bl-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
+                          type="text"
+                          placeholder="Code"
+                          value="+91"
+                        />
+                        <input
+                          className="appearance-none flex-1 border border-gray-200 bg-gray-100 rounded-tr-md rounded-br-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
+                          type="text"
+                          placeholder="Type phone"
+                          onChange={addAddress}
+                          name="phone"
+                          value={phone}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label className="block mb-1"> Email </label>
+                      <input
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        type="email"
+                        placeholder="Type here"
+                        onChange={addAddress}
+                        name="email"
+                        value={email}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <label className="flex items-center w-max my-4">
-                  <input name="" type="checkbox" className="h-4 w-4" required />
-                  <span className="ml-2 inline-block text-gray-500">
-                    {" "}
-                    I agree with Terms and Conditions{" "}
-                  </span>
-                </label>
-
-                <hr className="my-4" />
-
-                <h2 className="text-xl font-semibold mb-5">
-                  Shipping information
-                </h2>
-
-                {/* <div className="grid sm:grid-cols-3 gap-3 mb-6">
-                <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
-                  <span>
+                  <label className="flex items-center w-max my-4">
                     <input
-                      name="shipping"
-                      type="radio"
-                      className="h-4 w-4 mt-1"
+                      name=""
+                      type="checkbox"
+                      className="h-4 w-4"
+                      required
                     />
-                  </span>
-                  <p className="ml-2">
-                    <span>Express delivery</span>
-                    <small className="block text-sm text-gray-400">
-                      3-4 days via Fede
-                    </small>
-                  </p>
-                </label>
-                <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
-                  <span>
-                    <input
-                      name="shipping"
-                      type="radio"
-                      className="h-4 w-4 mt-1"
-                    />
-                  </span>
-                  <p className="ml-2">
-                    <span>Post office</span>
-                    <small className="block text-sm text-gray-400">
-                      20-30 days via post
-                    </small>
-                  </p>
-                </label>
-                <label className="flex p-3 border border-gray-200 rounded-md bg-gray-50 hover:border-blue-400 hover:bg-blue-50 cursor-pointer">
-                  <span>
-                    <input
-                      name="shipping"
-                      type="radio"
-                      className="h-4 w-4 mt-1"
-                    />
-                  </span>
-                  <p className="ml-2">
-                    <span>Self pick-up</span>
-                    <small className="block text-sm text-gray-400">
-                      Nearest location
-                    </small>
-                  </p>
-                </label>
-              </div> */}
-
-                <div className="grid md:grid-cols-3 gap-x-3">
-                  <div className="mb-4 md:col-span-2">
-                    <label className="block mb-1">
+                    <span className="ml-2 inline-block text-gray-500">
                       {" "}
-                      Address* (House / Building / Locality)
-                    </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="text"
-                      placeholder="Type here"
-                      onChange={addAddress}
-                      name="local"
-                      value={local}
-                    />
+                      I agree with Terms and Conditions{" "}
+                    </span>
+                  </label>
+
+                  <hr className="my-4" />
+
+                  <h2 className="text-xl font-semibold mb-5">
+                    Shipping information
+                  </h2>
+
+                  <div className="grid md:grid-cols-3 gap-x-3">
+                    <div className="mb-4 md:col-span-2">
+                      <label className="block mb-1">
+                        {" "}
+                        Address* (House / Building / Locality)
+                      </label>
+                      <input
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        type="text"
+                        placeholder="Type here"
+                        onChange={addAddress}
+                        name="local"
+                        value={local}
+                      />
+                    </div>
+
+                    <div className="mb-4 md:col-span-1">
+                      <label className="block mb-1"> City* </label>
+                      <input
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        type="text"
+                        placeholder="City"
+                        value={city}
+                        onInput={addAddress}
+                        name="city"
+                      />
+                    </div>
                   </div>
 
-                  <div className="mb-4 md:col-span-1">
-                    <label className="block mb-1"> City* </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="text"
-                      placeholder="City"
-                      value={city}
-                      onInput={addAddress}
-                      name="city"
-                    />
-                  </div>
-                </div>
+                  <div className="grid md:grid-cols-3 gap-x-3">
+                    <div className="mb-4 md:col-span-1">
+                      <label className="block mb-1"> District </label>
+                      <input
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        type="text"
+                        placeholder="District"
+                        value={district}
+                        onInput={addAddress}
+                        name="district"
+                      />
+                    </div>
 
-                <div className="grid md:grid-cols-3 gap-x-3">
-                  <div className="mb-4 md:col-span-1">
-                    <label className="block mb-1"> District </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="text"
-                      placeholder="District"
-                      value={district}
-                      onInput={addAddress}
-                      name="district"
-                    />
-                  </div>
+                    <div className="mb-4 md:col-span-1">
+                      <label className="block mb-1"> State </label>
+                      <input
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        type="text"
+                        placeholder="State"
+                        value={stateName}
+                        onChange={addAddress}
+                        name="stateName"
+                      />
+                    </div>
 
-                  <div className="mb-4 md:col-span-1">
-                    <label className="block mb-1"> State </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="text"
-                      placeholder="State"
-                      value={stateName}
-                      onChange={addAddress}
-                      name="stateName"
-                    />
-                  </div>
-
-                  <div className="mb-4 md:col-span-1">
-                    <label className="block mb-1"> PIN Code </label>
-                    <input
-                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                      type="text"
-                      placeholder="Pin Code"
-                      name="pin"
-                      onChange={addAddress}
-                      value={pin}
-
-                    />
-                    {/* <Pincode
+                    <div className="mb-4 md:col-span-1">
+                      <label className="block mb-1"> PIN Code </label>
+                      <input
+                        className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        type="text"
+                        placeholder="Pin Code"
+                        name="pin"
+                        onChange={addAddress}
+                        value={pin}
+                      />
+                      {/* <Pincode
                       invalidError="Please check pincode"
                       lengthError="check length"
                       getData={(data) => setPincodeData(data)}
@@ -437,43 +455,44 @@ const CheckOut = () => {
                       onInputCapture={addAddress}
                       name="pin"
                     /> */}
+                    </div>
                   </div>
-                </div>
 
-                <div className="mb-4">
-                  <label className="block mb-1"> Other info </label>
-                  <textarea
-                    placeholder="Type your wishes"
-                    className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-                  ></textarea>
-                </div>
+                  <div className="mb-4">
+                    <label className="block mb-1"> Other info </label>
+                    <textarea
+                      placeholder="Type your wishes"
+                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                    ></textarea>
+                  </div>
 
-                <label className="flex items-center w-max my-4">
-                  <input name="" type="checkbox" className="h-4 w-4" />
-                  <span className="ml-2 inline-block text-gray-500">
-                    {" "}
-                    Save my information for future purchase{" "}
-                  </span>
-                </label>
+                  <label className="flex items-center w-max my-4">
+                    <input name="" type="checkbox" className="h-4 w-4" />
+                    <span className="ml-2 inline-block text-gray-500">
+                      {" "}
+                      Save my information for future purchase{" "}
+                    </span>
+                  </label>
 
-                <div className="flex justify-end space-x-2">
-                  <Link
-                    className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-bistre"
-                    to="/"
-                  >
-                    {" "}
-                    Back to Home{" "}
-                  </Link>
-                  <button
-                    className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
-                    onClick={saveAddressToDb}
-                  >
-                    {" "}
-                    Save Address{" "}
-                  </button>
-                </div>
-              </article>)}
-            </main>
+                  <div className="flex justify-end space-x-2">
+                    <Link
+                      className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-bistre"
+                      to="/"
+                    >
+                      {" "}
+                      Back to Home{" "}
+                    </Link>
+                    <button
+                      className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
+                      onClick={saveAddressToDb}
+                    >
+                      {" "}
+                      Save Address{" "}
+                    </button>
+                  </div>
+                </article>
+              )}
+            </main> )}
             <aside className="md:w-1/3">
               <article className="text-gray-600" style={{ maxWidth: "350px" }}>
                 <h2 className="text-lg font-semibold mb-3">Summary</h2>

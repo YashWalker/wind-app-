@@ -35,6 +35,7 @@ import Cart from "./pages/Cart";
 import CheckOut from "./pages/CheckOut";
 import CartSlide from "./components/Cart/CartSlide";
 import Coupon from "./components/Admin/Coupon/Coupon";
+import Payment from './pages/Payment'
 
 function App() {
   const [progress, setProgress] = useState(0);
@@ -57,6 +58,7 @@ function App() {
                 token: idTokenResult.token,
                 role: res.data.role,
                 _id: res.data._id,
+                address: res.data.address[0]
               },
             });
           })
@@ -82,6 +84,8 @@ function App() {
         <Route exact path="/furniture" element={<Furniture />}></Route>
         <Route exact path="/cart" element={<Cart />}></Route>
         <Route exact path="/checkout" element={<CheckOut />}></Route>
+        <Route exact path="/payment" element={<Payment />}></Route>
+
         <Route
           exact
           path="/forgotPassword"
