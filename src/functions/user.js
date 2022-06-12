@@ -35,6 +35,15 @@ export const saveUserAddress = async (authtoken, address) =>
       },
     }
   );
+  export const removeUserAddress = async (authtoken, name) =>
+  await axios.delete(
+    `${process.env.REACT_APP_API}/user/address/${name}`,
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
 
 export const applyCoupon = async (authtoken, coupon) =>
   await axios.post(

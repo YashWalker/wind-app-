@@ -1,13 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserCart , emptyUserCart , applyCoupon} from "../functions/user";
+import {
+  getUserCart,
+  emptyUserCart,
+  applyCoupon,
+  saveUserAddress,
+} from "../functions/user";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Pincode from "react-pincode";
+import {HomeIcon, UserIcon} from "@heroicons/react/outline"
+
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  local: "",
+  city: "",
+  district: "",
+  stateName: "",
+  pin: "",
+};
 
 const CheckOut = () => {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [coupon, setCoupon] = useState("");
+  const [pincodeData, setPincodeData] = useState("");
+  const [address, setAddress] = useState(initialState);
+  const [addressSaved, setAddressSaved] = useState(false);
   // discount price
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountError, setDiscountError] = useState("");
@@ -16,6 +38,17 @@ const CheckOut = () => {
   const { user } = useSelector((state) => ({ ...state }));
   const couponTrueOrFalse = useSelector((state) => state.coupon);
 
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    local,
+    city,
+    district,
+    stateName,
+    pin,
+  } = address;
 
   // useEffect(() => {
   //   getUserCart(user.token).then((res) => {
@@ -34,7 +67,6 @@ const CheckOut = () => {
       });
     }
   }, [user]);
-
 
   const emptyCart = () => {
     // remove from local storage
@@ -56,43 +88,58 @@ const CheckOut = () => {
     });
   };
 
-  
   const applyDiscountCoupon = () => {
     console.log("send coupon to backend", coupon);
-    applyCoupon(user.token, coupon).then((res) => {
-      console.log("RES ON COUPON APPLIED", res.data);
-      if (res.data) {
-        setTotalAfterDiscount(res.data);
+    applyCoupon(user.token, coupon)
+      .then((res) => {
+        console.log("RES ON COUPON APPLIED", res.data);
+        if (res.data) {
+          setTotalAfterDiscount(res.data);
+          toast.success(`Coupon ${res.data.name} applied`);
+          // update redux coupon applied true/false
+          dispatch({
+            type: "COUPON_APPLIED",
+            payload: true,
+          });
+        }
+        // error
+        // else  {
+        //   setDiscountError("Invalid Coupon");
+        //   // update redux coupon applied true/false
+        //   dispatch({
+        //     type: "COUPON_APPLIED",
+        //     payload: false,
+        //   });
+        // }
+      })
+      .catch((err) => {
+        setDiscountError("Invalid Coupon");
+        toast.error(err);
         // update redux coupon applied true/false
         dispatch({
           type: "COUPON_APPLIED",
-          payload: true,
+          payload: false,
         });
-      }
-      // error
-      // else  {
-      //   setDiscountError("Invalid Coupon");
-      //   // update redux coupon applied true/false
-      //   dispatch({
-      //     type: "COUPON_APPLIED",
-      //     payload: false,
-      //   });
-      // }
-    }).catch((err)=> {
-      setDiscountError("Invalid Coupon");
-      toast.error(err)
-      // update redux coupon applied true/false
-      dispatch({
-        type: "COUPON_APPLIED",
-        payload: false,
       });
-    });
   };
 
+  const addAddress = (e) => {
+    setAddress({ ...address, [e.target.name]: e.target.value });
+    console.log(address);
+  };
 
   const saveAddressToDb = () => {
     //
+    saveUserAddress(user.token, address).then((res) => {
+      if (res.data.ok) {
+        setAddressSaved(true);
+        toast.success("Address saved");
+       
+      }
+    });
   };
+
+  
   return (
     <>
       <section className="py-10 bg-gray-50">
@@ -124,10 +171,66 @@ const CheckOut = () => {
                     </div>
                   </div>
                 </article> */}
+              {addressSaved ? (<> <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
+                <h2 className="text-xl font-semibold mb-5"> Saved Address </h2>
+               
+              <figure class="flex items-start sm:items-center">
+              <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
+                      <UserIcon className="w-8 h-8"/>
+                    </span>
+                <figcaption className="mx-2">
+                  <h5 class="font-semibold text-lg">
+                    {address.firstName + address.lastName}
+                  </h5>
+                  <p>
+                    Email: <Link to={`mailto:${user.email}`}>{address.email}</Link>{" "}
+                    | Phone: <Link to="tel:+91">+91-{address.phone}</Link>
+                  </p>
+                </figcaption>
+              </figure>
 
+              <hr class="my-4" />
+
+              <div class="sm:flex mb-5 gap-4">
+                <figure class="md:w-1/2 flex items-center relative bg-gray-100 p-4 rounded-md">
+                  <div class="mr-3">
+                    <span class="flex items-center justify-center text-yellow-500 w-12 h-12 bg-white rounded-full shadow">
+                      <HomeIcon className="w-8 h-8"/>
+                    </span>
+                  </div>
+                  <figcaption class="text-gray-600">
+                    <p>
+                      {" "}
+                      {address.local}, <br/>{address.city}, {address.district},<br/>{address.stateName}, {address.pin} 
+                      <small class="text-gray-400 mx-2">(Primary)</small>
+                    </p>
+                  </figcaption>
+                </figure>
+               
+              </div>
+              <hr className="my-4"/>
+              <div className="flex justify-end space-x-2">
+                  <Link
+                    className="px-5 py-2 inline-block text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:text-bistre"
+                    to="/"
+                  >
+                    {" "}
+                    Back to Home{" "}
+                  </Link>
+                  <button
+                    className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
+                    to="/payment"
+                  >
+                    {" "}
+                    Place Order{" "}
+                  </button>
+                </div>
+             
+                
+              </article></>):(
               <article className="border border-gray-200 bg-white shadow-sm rounded p-4 lg:p-6 mb-5">
                 <h2 className="text-xl font-semibold mb-5"> Checkout </h2>
-
+                
                 <div className="grid grid-cols-2 gap-x-3">
                   <div className="mb-4">
                     <label className="block mb-1"> First name </label>
@@ -135,6 +238,9 @@ const CheckOut = () => {
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="text"
                       placeholder="Type here"
+                      onChange={addAddress}
+                      name="firstName"
+                      value={firstName}
                     />
                   </div>
 
@@ -144,6 +250,9 @@ const CheckOut = () => {
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="text"
                       placeholder="Type here"
+                      onChange={addAddress}
+                      name="lastName"
+                      value={lastName}
                     />
                   </div>
                 </div>
@@ -162,6 +271,9 @@ const CheckOut = () => {
                         className="appearance-none flex-1 border border-gray-200 bg-gray-100 rounded-tr-md rounded-br-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400"
                         type="text"
                         placeholder="Type phone"
+                        onChange={addAddress}
+                        name="phone"
+                        value={phone}
                       />
                     </div>
                   </div>
@@ -172,6 +284,9 @@ const CheckOut = () => {
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="email"
                       placeholder="Type here"
+                      onChange={addAddress}
+                      name="email"
+                      value={email}
                     />
                   </div>
                 </div>
@@ -240,62 +355,88 @@ const CheckOut = () => {
 
                 <div className="grid md:grid-cols-3 gap-x-3">
                   <div className="mb-4 md:col-span-2">
-                    <label className="block mb-1"> Address* </label>
+                    <label className="block mb-1">
+                      {" "}
+                      Address* (House / Building / Locality)
+                    </label>
                     <input
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="text"
                       placeholder="Type here"
+                      onChange={addAddress}
+                      name="local"
+                      value={local}
                     />
                   </div>
 
                   <div className="mb-4 md:col-span-1">
                     <label className="block mb-1"> City* </label>
-                    <div className="relative">
-                      <select className="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full">
-                        <option>Jaipur</option>
-                        <option>Pune</option>
-                        <option>New Delhi</option>
-                      </select>
-                      <i className="absolute inset-y-0 right-0 p-2 text-gray-400">
-                        <svg
-                          width="22"
-                          height="22"
-                          className="fill-current"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M7 10l5 5 5-5H7z"></path>
-                        </svg>
-                      </i>
-                    </div>
+                    <input
+                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                      type="text"
+                      placeholder="City"
+                      value={city}
+                      onInput={addAddress}
+                      name="city"
+                    />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-x-3">
                   <div className="mb-4 md:col-span-1">
-                    <label className="block mb-1"> House </label>
+                    <label className="block mb-1"> District </label>
                     <input
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="text"
-                      placeholder="Type here"
+                      placeholder="District"
+                      value={district}
+                      onInput={addAddress}
+                      name="district"
                     />
                   </div>
 
                   <div className="mb-4 md:col-span-1">
-                    <label className="block mb-1"> Building </label>
+                    <label className="block mb-1"> State </label>
                     <input
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="text"
-                      placeholder="Type here"
+                      placeholder="State"
+                      value={stateName}
+                      onChange={addAddress}
+                      name="stateName"
                     />
                   </div>
 
                   <div className="mb-4 md:col-span-1">
-                    <label className="block mb-1"> ZIP code </label>
+                    <label className="block mb-1"> PIN Code </label>
                     <input
                       className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                       type="text"
-                      placeholder="Type here"
+                      placeholder="Pin Code"
+                      name="pin"
+                      onChange={addAddress}
+                      value={pin}
+
                     />
+                    {/* <Pincode
+                      invalidError="Please check pincode"
+                      lengthError="check length"
+                      getData={(data) => setPincodeData(data)}
+                      showArea={false}
+                      showState={false}
+                      showDistrict={false}
+                      showCity={false}
+                      className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                      pincodeInput={{
+                        borderRadius: ".375rem",
+                        padding: ".5rem .75rem .5rem .75rem",
+                        backgroundColor: "rgb(243 244 246)",
+                        border: "rgb(229 231 235)",
+                        width: "100%",
+                      }}
+                      onInputCapture={addAddress}
+                      name="pin"
+                    /> */}
                   </div>
                 </div>
 
@@ -323,15 +464,15 @@ const CheckOut = () => {
                     {" "}
                     Back to Home{" "}
                   </Link>
-                  <Link
+                  <button
                     className="px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
-                    to="*"
+                    onClick={saveAddressToDb}
                   >
                     {" "}
-                    Continue{" "}
-                  </Link>
+                    Save Address{" "}
+                  </button>
                 </div>
-              </article>
+              </article>)}
             </main>
             <aside className="md:w-1/3">
               <article className="text-gray-600" style={{ maxWidth: "350px" }}>
@@ -347,13 +488,28 @@ const CheckOut = () => {
                   </li>
                   <li className="flex justify-between mb-1">
                     <span>Discount:</span>
-                    <span className="text-green-500"> - {!totalAfterDiscount ? ("0") :(`${total-totalAfterDiscount}`)} </span>
-                    {discountError ? (<span className="p-2">Invalid Coupon</span>): ""}
+                    <span className="text-green-500">
+                      {" "}
+                      -{" "}
+                      {!totalAfterDiscount
+                        ? "0"
+                        : `${total - totalAfterDiscount}`}{" "}
+                    </span>
+                    {discountError ? (
+                      <span className="p-2">Invalid Coupon</span>
+                    ) : (
+                      ""
+                    )}
                   </li>
-                  
+
                   <li className="border-t flex justify-between mt-3 pt-3">
                     <span>Total price:</span>
-                    <span className="text-gray-900 font-bold">₹ {!totalAfterDiscount ? (`${total}`):(`${totalAfterDiscount}`)}</span>
+                    <span className="text-gray-900 font-bold">
+                      ₹{" "}
+                      {!totalAfterDiscount
+                        ? `${total}`
+                        : `${totalAfterDiscount}`}
+                    </span>
                   </li>
                 </ul>
 
@@ -369,7 +525,6 @@ const CheckOut = () => {
                       setDiscountError("");
                     }}
                     value={coupon}
-                    
                   />
                   <button
                     type="button"
@@ -381,7 +536,6 @@ const CheckOut = () => {
                   </button>
                 </div>
                 <hr className="my-4" />
-                
 
                 <h2 className="text-lg font-semibold mb-3">Items in cart</h2>
 
@@ -414,8 +568,12 @@ const CheckOut = () => {
                 ))}
                 <hr className="my-4" />
 
-                <button className=" px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900 " onClick={emptyCart}>Empty Cart</button>
-
+                <button
+                  className=" px-5 py-2 inline-block text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900 "
+                  onClick={emptyCart}
+                >
+                  Empty Cart
+                </button>
               </article>
             </aside>
           </div>
