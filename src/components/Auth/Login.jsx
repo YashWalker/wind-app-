@@ -64,6 +64,7 @@ const Login = ({ history }) => {
               token: idTokenResult.token,
               role: res.data.role,
               _id: res.data._id,
+              address: res.data.address[0]
             },
           });
 
@@ -93,6 +94,8 @@ const Login = ({ history }) => {
                 token: idTokenResult.token,
                 role: res.data.role,
                 _id: res.data._id,
+                address: res.data.address[0],
+                picture: user.photoURL
               },
             });
             roleBasedRedirect(res);

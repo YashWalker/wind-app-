@@ -37,9 +37,9 @@ const SlideView = () => {
               <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                 {products.map((product) => (
                   <div key={product.id}>
-                    <div className="group relative">
-                      <div key={product._id} className="">
-                        <ProductCard product={product} />
+                    <div className="group relative" >
+                      <div>
+                        <ProductCard  product={product} />
                       </div>
                     </div>
                   </div>

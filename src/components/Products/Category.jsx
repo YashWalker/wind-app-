@@ -31,6 +31,7 @@ const Category = () => {
               <Link
                 to={`/category/${ele.toLowerCase()}`}
                 className="hover:text-orangepeel"
+                key={ele}
               >
                 <img
                   src={`/Assets/images/Category/${ele}.svg`}

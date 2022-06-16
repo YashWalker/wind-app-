@@ -20,6 +20,8 @@ const StarRating = () => {
                   transition
                   //   allowHalfIcon
                   //   showTooltip
+                  className=""
+                  style={{display : "grid"}}
                 />
               </div>
             </div>

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getProduct, getRelated, productStar } from "../../functions/product";
-import StarRating from "../Utils/StarRating";
+import StarRating from "react-star-ratings"
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
-import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/outline";
+import { HeartIcon, ShoppingCartIcon, StarIcon } from "@heroicons/react/outline";
 import RelatedItem from "./RelatedItem";
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
+import { showAverage } from "../../functions/rating";
+
 
 const ProductOverView = () => {
   const [products, setProducts] = useState([]);
@@ -112,8 +114,26 @@ const ProductOverView = () => {
                 <h2 className="font-semibold text-2xl mb-4">
                   {products.title}
                 </h2>
-                <div className="flex flex-wrap items-center space-x-2 mb-2">
-                  <StarRating className="block " />
+                <div className="flex flex-wrap items-center space-x-4 mb-3">
+                {products && products.ratings && products.ratings.length > 0 ? (
+        showAverage(products)
+      ) : (
+        <div className="text-center pt-1 pb-3">No Ratings Yet</div>
+      )}
+                  {/* <StarRating  name={products._id}
+                  numberOfStars={5}
+                  rating={3}
+                  changeRating={(newRating , name) =>{
+                    console.log("new" , newRating , name)
+                  }}
+                  isSelectable={false}
+                  starRatedColor="rgb(255, 188, 11)"
+                  starHoverColor="rgb(255, 188, 11)"
+                  starDimension="1.5rem"
+                  starSpacing=".25rem"
+
+                  
+                  /> */}
                   <span className="text-yellow-500">9.3</span>
 
                   <svg
@@ -124,6 +144,7 @@ const ProductOverView = () => {
                     <circle cx="3" cy="3" r="3" fill="#DBDBDB" />
                   </svg>
 
+                  {products.sold > 0 && <>
                   <span className="text-gray-400">
                     <i className="fa fa-shopping-bag mr-2"></i>
                     {products.sold} Orders
@@ -136,6 +157,7 @@ const ProductOverView = () => {
                   >
                     <circle cx="3" cy="3" r="3" fill="#DBDBDB" />
                   </svg>
+                  </>}
 
                   <span className="text-green-500">Verified</span>
                 </div>
@@ -177,29 +199,37 @@ const ProductOverView = () => {
 
                 <hr />
                 <div className="flex flex-wrap gap-3 mt-4">
-                  <Link
+                  {/* <Link
                     className="px-4 py-2 inline-flex text-white bg-yellow-500 border border-transparent rounded-md hover:bg-yellow-600"
                     to="/"
                   >
                     Buy now
-                  </Link>
+                  </Link> */}
 
                   <Link
-                    className="px-4 py-2 inline-flex align-middle items-center text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                    className="px-3 py-2 inline-flex align-middle items-center text-white bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
                     to="#"
                     onClick={handleAddToCart}
                   >
-                    <ShoppingCartIcon className="h-5 w-5 mr-2" />
+                    <ShoppingCartIcon className="h-5 w-5 mr-2 hover:text-orangepeel" />
                     Add to cart
                   </Link>
 
                   <Link
-                    className="px-4 py-2 inline-flex align-middle items-center text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100"
+                    className="mx-2 px-3 py-2  inline-flex align-middle text-red-600 border border-gray-300 rounded-md hover:bg-gray-100"
                     to="/"
                   >
-                    <HeartIcon className="h-5 w-5 mr-2" />
+                    <HeartIcon className="h-6 w-6 hover:fill-red-600 " />
                     Save for later
                   </Link>
+                  
+                  <button
+                    className="mx-1 px-3 py-2  inline-flex align-middle text-orangepeel border border-gray-300 rounded-md hover:bg-gray-100"
+                  >
+                    <StarIcon className=" mr-2 h-6 w-6 hover:fill-orangepeel " />
+                    Give Ratings
+                  </button>
+                 
                 </div>
               </main>
             </div>{" "}

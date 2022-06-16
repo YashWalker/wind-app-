@@ -37,10 +37,10 @@ export const getProducts = async (sort, order, page) =>
 export const getProductsCount = async () =>
   await axios.get(`${process.env.REACT_APP_API}/products/total`);
 
-export const productStar = async (productId, star, authtoken) =>
+export const productStar = async (productId, star, review, authtoken) =>
   await axios.put(
     `${process.env.REACT_APP_API}/product/star/${productId}`,
-    { star },
+    { star , review},
     {
       headers: {
         authtoken,

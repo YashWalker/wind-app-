@@ -1,9 +1,9 @@
 import axios from "axios";
 
-export const createPaymentIntent = (authtoken, coupon) =>
+export const createPaymentIntent = ({oid , total , email }, authtoken) =>
   axios.post(
     `${process.env.REACT_APP_API}/create-payment-intent`,
-    { couponApplied: coupon },
+    {oid , total , email},
     {
       headers: {
         authtoken,

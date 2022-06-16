@@ -45,7 +45,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <>
-      <section className="p-5 py-10 bg-purple-50 text-center transform duration-500 hover:-translate-y-2 cursor-pointer">
+      <section className="p-5 py-10 bg-purple-50 text-center transform duration-500 hover:-translate-y-2 cursor-pointer" >
         <Link to={`/product/${slug}`}>
           <img
             src={images && images.length ? images[0].url : "NO Image"}
