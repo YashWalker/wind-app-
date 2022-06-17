@@ -33,6 +33,7 @@ const CheckOut = () => {
   const [address, setAddress] = useState(initialState);
   const [addressSaved, setAddressSaved] = useState(false);
   const [data, setData] = useState([]);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   // discount price
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
@@ -141,49 +142,67 @@ const CheckOut = () => {
       }
     });
   };
-  
-  
+
   const payPaytm = async () => {
-    let oid = Math.floor(Math.random()* Date.now())
+    let oid = Math.floor(Math.random() * Date.now());
     let email = user.email;
-    createPaymentIntent({ oid, total, email }, user.token).then((res) => {
-      if (res.data) {
-        setData(res.data);
-        console.log("Token", data.txnToken);
-        var config = {
-          root: "",
-          flow: "DEFAULT",
-          data: {
-            orderId: oid /* update order id */,
-            token: data.txnToken /* update token value */,
-            tokenType: "TXN_TOKEN",
-            amount: total /* update amount */,
-          },
-          handler: {
-            notifyMerchant: function (eventName, data) {
-              console.log("notifyMerchant handler function called");
-              console.log("eventName => ", eventName);
-              console.log("data => ", data);
+    setCheckoutLoading(true);
+    createPaymentIntent({ oid, total, email }, user.token)
+      .then((res) => {
+        if (res.data) {
+          const { data } = res;
+          console.log("Token", data.txnToken);
+          var config = {
+            root: "",
+            flow: "DEFAULT",
+            data: {
+              orderId: oid /* update order id */,
+              token: data.txnToken /* update token value */,
+              tokenType: "TXN_TOKEN",
+              amount: total /* update amount */,
             },
-          },
-        };
-        if (window.Paytm && window.Paytm.CheckoutJS) {
-          window.Paytm.CheckoutJS.init(config)
-            .then(function onSuccess() {
-              window.Paytm.CheckoutJS.invoke();
-            })
-            .catch(function onError(error) {
-              console.log("Error => ", error);
-            });
+            handler: {
+              notifyMerchant: function (eventName, data) {
+                console.log("notifyMerchant handler function called");
+                console.log("eventName => ", eventName);
+                console.log("data => ", data);
+              },
+            },
+          };
+
+          if (window.Paytm && window.Paytm.CheckoutJS) {
+            window.Paytm.CheckoutJS.init(config)
+              .then(function onSuccess() {
+                window.Paytm.CheckoutJS.invoke();
+                setCheckoutLoading(false);
+              })
+              .catch(function onError(error) {
+                console.log("Error => ", error);
+                setCheckoutLoading(false);
+              });
+          }
+          // setting data here
+          // data from setData will not contain because setData is async operation
+
+          setData(data);
         }
-      }
-    });
-    
-   
+      })
+      .catch((e) => {
+        setCheckoutLoading(false);
+      });
   };
 
   return (
     <>
+      {checkoutLoading && (
+        <div class="fixed bg-black bg-opacity-50 top-0 justify-center items-center h-full flex right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+          <img
+            src={`/Assets/images/Loading.svg`}
+            alt="Loading"
+            className="w-16 h-16"
+          />
+        </div>
+      )}
       <section className="py-10 bg-gray-50">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 lg:gap-8">
