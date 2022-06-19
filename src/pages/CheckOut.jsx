@@ -147,7 +147,11 @@ const CheckOut = () => {
     let oid = Math.floor(Math.random() * Date.now());
     let email = user.email;
     setCheckoutLoading(true);
+<<<<<<< HEAD
     createPaymentIntent({ oid, coupon, email }, user.token)
+=======
+    createPaymentIntent({ oid, total, email }, user.token)
+>>>>>>> f885e6344d3eac8d030c10843d4bdbbbd78a88e0
       .then((res) => {
         if (res.data) {
           const { data } = res;
@@ -161,6 +165,7 @@ const CheckOut = () => {
               tokenType: "TXN_TOKEN",
               amount: total /* update amount */,
             },
+<<<<<<< HEAD
             
             payMode:{
               "order": ['UPI']
@@ -168,18 +173,25 @@ const CheckOut = () => {
             merchant:{
               name: 'Woodkoof.com'
             },
+=======
+>>>>>>> f885e6344d3eac8d030c10843d4bdbbbd78a88e0
             handler: {
               notifyMerchant: function (eventName, data) {
                 console.log("notifyMerchant handler function called");
                 console.log("eventName => ", eventName);
                 console.log("data => ", data);
               },
+<<<<<<< HEAD
               transactionStatus:function transactionStatus(paymentStatus){
                 console.log("paymentStatus => ",paymentStatus);              
               } 
             },
           };
          
+=======
+            },
+          };
+>>>>>>> f885e6344d3eac8d030c10843d4bdbbbd78a88e0
 
           if (window.Paytm && window.Paytm.CheckoutJS) {
             window.Paytm.CheckoutJS.init(config)
@@ -206,7 +218,11 @@ const CheckOut = () => {
   return (
     <>
       {checkoutLoading && (
+<<<<<<< HEAD
         <div className="fixed bg-black bg-opacity-50 top-0 justify-center items-center h-full flex right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+=======
+        <div class="fixed bg-black bg-opacity-50 top-0 justify-center items-center h-full flex right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+>>>>>>> f885e6344d3eac8d030c10843d4bdbbbd78a88e0
           <img
             src={`/Assets/images/Loading.svg`}
             alt="Loading"

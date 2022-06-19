@@ -85,7 +85,11 @@ function App() {
         <Route exact path="/furniture" element={<Furniture />}></Route>
         <Route exact path="/cart" element={<Cart />}></Route>
         <Route exact path="/checkout" element={<CheckOut />}></Route>
+<<<<<<< HEAD
         <Route exact path="/payment/:orderId" element={<Payment />}></Route>
+=======
+        <Route exact path="/payment" element={<Payment />}></Route>
+>>>>>>> f885e6344d3eac8d030c10843d4bdbbbd78a88e0
 
         <Route
           exact
