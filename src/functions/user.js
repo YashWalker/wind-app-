@@ -56,17 +56,13 @@ export const applyCoupon = async (authtoken, coupon) =>
     }
   );
 
-<<<<<<< HEAD
+
 export const createOrder = async (paytmResponse, authtoken) =>
   await axios.post(
     `${process.env.REACT_APP_API}/user/order`,
     { paytmResponse },
-=======
-export const createOrder = async (stripeResponse, authtoken) =>
-  await axios.post(
-    `${process.env.REACT_APP_API}/user/order`,
-    { stripeResponse },
->>>>>>> f885e6344d3eac8d030c10843d4bdbbbd78a88e0
+
+
     {
       headers: {
         authtoken,
