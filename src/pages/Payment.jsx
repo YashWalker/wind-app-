@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getOrderDetails } from "../functions/order";
 
 const Payment = () => {
+  const [data, setData] = useState(null);
   const [values, setValues] = useState({
     success: false,
     error: false,
@@ -12,9 +13,16 @@ const Payment = () => {
   const { user } = useSelector((state) => ({ ...state }));
   const { orderId } = useParams();
   //const paytm = collection(db , "payments" ,'zX3ZBR7XBEz08m97tS3n' );
-
+  const getOrderDetailsApi = async (orderId, token) => {
+    try {
+      const resp = await getOrderDetails(orderId, token);
+      setData(resp.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
-    user?.token && getOrderDetails(orderId, user.token);
+    user?.token && getOrderDetailsApi(orderId, user.token);
   }, [user]);
 
   return (
