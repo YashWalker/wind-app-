@@ -158,6 +158,7 @@ const CheckOut = () => {
             flow: "DEFAULT",
             data: {
               orderId: oid /* update order id */,
+              user_name: user.uid,
               token: data.txnToken /* update token value */,
               tokenType: "TXN_TOKEN",
               amount: total /* update amount */,
