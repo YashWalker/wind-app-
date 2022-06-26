@@ -7,7 +7,7 @@ import { getUserOrders } from "../functions/user";
 
 const UserProfile = () => {
   const { user } = useSelector((state) => ({ ...state }));
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,9 +18,7 @@ const UserProfile = () => {
     setLoading(true);
     getUserOrders(user.token).then((res) => {
       if (res.data) {
-        console.log(res.data.map((p)=>(console.log(p))));
-        res.data.map((p)=>(setOrders(p)))
-        console.log("ORders", orders)
+        setOrders(res.data);
         setLoading(false);
       } else {
         console.log("ERROR");
