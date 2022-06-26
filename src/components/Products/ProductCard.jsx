@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  const { images, title, description, slug, sellprice, price } = product;
+  const { images, title, description, slug, sellprice, price ,quantity } = product;
 
   return (
     <>
@@ -106,12 +106,13 @@ const ProductCard = ({ product }) => {
             {`${((sellprice / price) * 100).toFixed(2)} % off`}
           </span>
         </p>
-
+        
         <button
           onClick={handleAddToCart}
           className="p-2 px-6 bg-amber-800 text-white rounded-md hover:bg-amber-900"
+          disabled={quantity < 1}
         >
-          Add To Cart
+          {quantity < 1 ? "Out of Stock" : "Add to Cart"}
         </button>
       </section>
     </>
