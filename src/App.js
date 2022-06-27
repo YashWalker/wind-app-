@@ -37,6 +37,7 @@ import CartSlide from "./components/Cart/CartSlide";
 import Coupon from "./components/Admin/Coupon/Coupon";
 import Payment from "./pages/Payment";
 import OrderStatus from "./components/Admin/Orders/OrderStatus";
+import Wishlist from "./components/users/Wishlist";
 
 function App() {
   const [progress, setProgress] = useState(0);
@@ -108,7 +109,8 @@ function App() {
         <Route exact path="/category/:slug" element={<CategoryVise />}></Route>
         <Route path="/user/*" element={<UserRoute />}>
           <Route path="profile" element={<UserProfile />}></Route>
-          <Route path="history" element={<OrderHistory />}></Route>
+          <Route path="profile/history" element={<OrderHistory />}></Route>
+          <Route path="profile/wishlist" element={<Wishlist/>}></Route>
         </Route>
         <Route exact path="/admin/*" element={<AdminRoute />}>
           <Route exact path="dashboard" element={<AdminDashboard />}></Route>

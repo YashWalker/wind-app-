@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams , useNavigate} from "react-router-dom";
 import { getProduct, getRelated, productStar } from "../../functions/product";
 import StarRating from "react-star-ratings"
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -9,6 +9,8 @@ import RelatedItem from "./RelatedItem";
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 import { showAverage } from "../../functions/rating";
+import { addToWishlist } from "../../functions/user";
+import {toast} from "react-toastify";
 
 
 const ProductOverView = () => {
@@ -19,6 +21,7 @@ const ProductOverView = () => {
 
   const { user, cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
+  const navigate  = useNavigate();
 
   const { slug } = useParams();
 
@@ -91,6 +94,20 @@ const ProductOverView = () => {
   //     loadSingleProducts(); // if you want to show updated rating in real time
   //   });
   // };
+
+  const handleAddToWishlist = (e) => {
+    e.preventDefault();
+    if (!user?.token) {
+      toast.error("Please login first");
+      navigate("/login");
+      return;
+    }
+    addToWishlist(products._id, user.token).then((res) => {
+      console.log("ADDED TO WISHLIST", res.data);
+      toast.success("Added to wishlist");
+      
+    });
+  };
 
   return (
     <>
@@ -217,7 +234,8 @@ const ProductOverView = () => {
 
                   <Link
                     className="mx-2 px-3 py-2  inline-flex align-middle text-red-600 border border-gray-300 rounded-md hover:bg-gray-100"
-                    to="/"
+                    to="#"
+                    onClick={handleAddToWishlist}
                   >
                     <HeartIcon className="h-6 w-6 hover:fill-red-600 " />
                     Save for later

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import ConfirmOrderPage from "../components/Utils/ConfirmOrderPage";
 import { getOrderDetails } from "../functions/order";
-import {emptyUserCart} from "../functions/user";
+import { emptyUserCart } from "../functions/user";
 
 const Payment = () => {
   const [order, setOrder] = useState([]);
@@ -11,10 +12,10 @@ const Payment = () => {
     error: false,
   });
 
-  const { user ,cart } = useSelector((state) => ({ ...state }));
+  const { user, cart } = useSelector((state) => ({ ...state }));
   const { orderId } = useParams();
   const dispatch = useDispatch();
-  
+
   const getOrderDetailsApi = async (orderId, token) => {
     try {
       const resp = await getOrderDetails(orderId, token);
@@ -32,8 +33,7 @@ const Payment = () => {
       });
       // empty cart from database
       emptyUserCart(user.token);
-      console.log(order)
-      
+      console.log(order);
     } catch (e) {
       console.log(e);
     }
@@ -43,28 +43,9 @@ const Payment = () => {
   }, [user]);
 
   return (
-    <>
-    
- <div className="max-w-3xl mx-auto px-4 pt-16 pb-24 text-center">
- <div className="mb-8">
-     <img src="" className="w-16 inline-block"/>
- </div>
- <h2 className="text-gray-800 font-medium text-3xl my-5">
-     YOUR ORDER IS CONFIRMED!
-     <p className="my-4">Order Id:#  </p>
- </h2>
- <p className="text-gray-600 ">
-     Thank you for your order! Your order is being processed and will be completed within 3-6 hours. You will
-     receive an email confirmation when your order is completed.
- </p>
- <div className="mt-10">
-     <Link to="/" className="bg-primary border border-primary text-black px-6 py-3 font-medium rounded-md uppercase hover:bg-transparent
-  hover:text-primary transition text-center">Continue shopping</Link>
- </div>
-</div>
-
-      
-    </>
+    <div>
+      <ConfirmOrderPage order={order}/>
+    </div>
   );
 };
 
