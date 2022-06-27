@@ -30,6 +30,7 @@
     "react-top-loading-bar": "^2.1.0",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
+    "swiper": "^8.2.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

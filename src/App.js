@@ -39,6 +39,7 @@ import Payment from "./pages/Payment";
 import OrderStatus from "./components/Admin/Orders/OrderStatus";
 import Wishlist from "./components/users/Wishlist";
 
+
 function App() {
   const [progress, setProgress] = useState(0);
   const dispatch = useDispatch();
@@ -87,6 +88,7 @@ function App() {
         <Route exact path="/furniture" element={<Furniture />}></Route>
         <Route exact path="/cart" element={<Cart />}></Route>
         <Route exact path="/checkout" element={<CheckOut />}></Route>
+        
 
         <Route exact path="/payment/:orderId" element={<Payment />}></Route>
        

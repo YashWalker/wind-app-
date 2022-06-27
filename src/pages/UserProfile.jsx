@@ -8,7 +8,7 @@ import OrderStatus from "../components/users/OrderStatus";
 
 const UserProfile = () => {
   const { user } = useSelector((state) => ({ ...state }));
-  const [orders, setOrders] = useState({});
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -20,6 +20,7 @@ const UserProfile = () => {
     getUserOrders(user.token).then((res) => {
       if (res.data) {
         setOrders(res.data);
+        console.log(res.data)
         setLoading(false);
       } else {
         console.log("ERROR");

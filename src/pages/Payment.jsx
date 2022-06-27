@@ -44,7 +44,7 @@ const Payment = () => {
 
   return (
     <div>
-      <ConfirmOrderPage order={order}/>
+      <ConfirmOrderPage order={order} user={user}/>
     </div>
   );
 };
