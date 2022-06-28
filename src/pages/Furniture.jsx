@@ -231,10 +231,8 @@ const Furniture = () => {
               shipping={shipping}
             />
             <main className="md:w-2/3 lg:w-3/4 px-4">
-              <div className="flex flex-row justify-between " >
-                <h2>
-                  {"Furniture"}
-                </h2>
+              <div className="flex flex-row justify-between ">
+                <h2>{"Furniture"}</h2>
                 <button type="button" className="products-filter-btn">
                   <i className="icon-filters"></i>
                 </button>
@@ -274,10 +272,8 @@ const Furniture = () => {
                       </Link>
                       <div className="p-2 border-t border-t-gray-200">
                         <div className="space-x-1 flex justify-center">
-                          {products &&
-                          products.ratings &&
-                          products.ratings.length > 0 ? (
-                            showAverage(products)
+                          {p && p.ratings && p.ratings.length > 0 ? (
+                            showAverage(p)
                           ) : (
                             <div className="text-center pt-1 pb-3">
                               No Ratings Yet
@@ -292,19 +288,18 @@ const Furniture = () => {
                           {p.title}
                         </Link>
                         <p className="font-semibold mb-2">₹ {p.sellprice}</p>
-                        <div className="flex">
-                          <Link
+                        <div className="flex justify-between">
+                          <button
                             className="px-4 py-2 inline-block text-white text-center bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
-                            to="#"
+                           
                           >
                             Add to cart
-                          </Link>
-                          <Link
+                          </button>
+                          <button
                             className="mx-3 px-3 py-2 inline-block text-red-700  border border-gray-300 rounded-md hover:bg-gray-100"
-                            to="#"
                           >
                             <HeartIcon className="h-6 w-6 active:fill-red-700 " />
-                          </Link>
+                          </button>
                         </div>
                       </div>
                     </article>

@@ -79,7 +79,7 @@ function App() {
       <LoadingBar color="#000000" height={4} progress={progress} />
       <ToastContainer />
 
-      <CartSlide />
+      <CartSlide/>
 
       <CRoutes>
         <Route exact path="/" element={<Home />}></Route>

@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
 const OrderStatus = ({ orders }) => {
+
+
   return (
     <>
       {orders.map((o) => (
@@ -17,7 +20,7 @@ const OrderStatus = ({ orders }) => {
               </div>
               <div>
                 <button className="px-3 py-1 mx-2 inline-block text-sm text-red-500 border border-gray-300 rounded-md hover:text-red-500 hover:border-red-600">
-                  Cancel order
+                 
                 </button>
                 <button className="px-3 py-1 inline-block text-white text-sm bg-blue-600 border border-blue-600 rounded-md hover:bg-blue-700">
                   Track order
@@ -56,36 +59,36 @@ const OrderStatus = ({ orders }) => {
             <hr className="my-4" />
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
-              {o.products.map((p)=>(
+              {o.products.map((p) => (
                 <>
-                 <figure className="flex flex-row mb-4">
-                <div>
-                  <Link
-                    to="#"
-                    className="block w-20 h-20 rounded border border-gray-200 overflow-hidden"
-                  >
-                    <img src={p.product.images?.[0].url} alt="Title" />
-                  </Link>
-                </div>
-                <figcaption className="ml-3">
-                  <p>
-                    <Link to={`/product/${p.product.slug}`} className="text-gray-600 hover:text-blue-600">
-                      {p.product.title}
-                    </Link>
-                  </p>
-                  <p className="mt-1 font-semibold">{p.count} X {p.product.sellprice} </p>
-                </figcaption>
-              </figure>
-                
-                
-                
+                  <figure className="flex flex-row mb-4">
+                    <div>
+                      <Link
+                        to="#"
+                        className="block w-20 h-20 rounded border border-gray-200 overflow-hidden"
+                      >
+                        <img src={p.product.images?.[0].url} alt="Title" />
+                      </Link>
+                    </div>
+                    <figcaption className="ml-3">
+                      <p>
+                        <Link
+                          to={`/product/${p.product.slug}`}
+                          className="text-gray-600 hover:text-blue-600"
+                        >
+                          {p.product.title}
+                        </Link>
+                      </p>
+                      <p className="mt-1 font-semibold">
+                        {p.count} X {p.product.sellprice}{" "}
+                      </p>
+                    </figcaption>
+                  </figure>
                 </>
               ))}
-             
-
-              
             </div>
           </article>
+         
         </>
       ))}
     </>

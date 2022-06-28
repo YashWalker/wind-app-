@@ -42,12 +42,13 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  const { images, title, description, slug, sellprice, price ,quantity } = product;
+  const { images, title, description, slug, sellprice, price, quantity } =
+    product;
 
   return (
     <>
-      <section className="p-5 py-5 bg-sky-50 text-center transform duration-500 cursor-pointer " >
-        <Link to={`/product/${slug}`} >
+      <section className="p-5 py-5 bg-sky-50 text-center transform duration-500 cursor-pointer ">
+        <Link to={`/product/${slug}`}>
           <img
             src={images && images.length ? images[0].url : "NO Image"}
             alt={slug}
@@ -55,11 +56,16 @@ const ProductCard = ({ product }) => {
           />
         </Link>
         <div className="space-x-1 flex justify-center mt-4">
-        {product && product.ratings && product.ratings.length > 0 ? (
-        showAverage(product)
-      ) : (
-        <div className="text-center pt-1 pb-3">No Ratings Yet</div>
-      )}
+          {product && product.ratings && product.ratings.length > 0 ? (
+            showAverage(product)
+          ) : (
+            <div className="text-center pt-1 pb-3">No Ratings Yet</div>
+          )}
+          {/* <span className="text-yellow-500">
+            {"("}
+            <span>{product.ratings && product.ratings.length}</span>
+            {")"}
+          </span> */}
         </div>
         <Link to={`/product/${slug}`}>
           <h1 className="text-xl mb-2">
@@ -78,7 +84,7 @@ const ProductCard = ({ product }) => {
             {`${((sellprice / price) * 100).toFixed(2)} % off`}
           </span>
         </p>
-        
+
         <button
           onClick={handleAddToCart}
           className="p-2 px-6 bg-amber-800 text-white rounded-md hover:bg-amber-900"

@@ -16,7 +16,7 @@ export const showAverage = (p) => {
     // console.log("highest", highest);
 
     let result = (totalReduced * 5) / highest;
-    // console.log("result", result);
+    console.log("result", result);
 
     return (
       <div className="text-center pt-1 pb-3">
@@ -24,12 +24,11 @@ export const showAverage = (p) => {
           <StarRating
              starRatedColor="rgb(255, 188, 11)"
              starHoverColor="rgb(255, 188, 11)"
-             starDimension="1.5rem"
-             starSpacing=".25rem"
-            rating={result}
-            editing={false}
+             starDimension="1.25rem"
+             starSpacing=".01rem"
+             rating={result}
+             editing={false}
           />{" "}
-          ({p.ratings.length})
         </span>
       </div>
     );
