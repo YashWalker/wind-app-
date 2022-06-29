@@ -6,28 +6,24 @@ export const showAverage = (p) => {
     let ratingsArray = p && p.ratings;
     let total = [];
     let length = ratingsArray.length;
-    // console.log("length", length);
 
     ratingsArray.map((r) => total.push(r.star));
     let totalReduced = total.reduce((p, n) => p + n, 0);
-    // console.log("totalReduced", totalReduced);
 
     let highest = length * 5;
-    // console.log("highest", highest);
 
     let result = (totalReduced * 5) / highest;
-    console.log("result", result);
 
     return (
       <div className="text-center pt-1 pb-3">
         <span>
           <StarRating
-             starRatedColor="rgb(255, 188, 11)"
-             starHoverColor="rgb(255, 188, 11)"
-             starDimension="1.25rem"
-             starSpacing=".01rem"
-             rating={result}
-             editing={false}
+            starRatedColor="rgb(255, 188, 11)"
+            starHoverColor="rgb(255, 188, 11)"
+            starDimension="1.25rem"
+            starSpacing=".01rem"
+            rating={result}
+            editing={false}
           />{" "}
         </span>
       </div>

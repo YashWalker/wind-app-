@@ -64,6 +64,8 @@ const Furniture = () => {
     });
   };
 
+
+
   // 2. load products on user search input
   useEffect(() => {
     const delayed = setTimeout(() => {
@@ -331,78 +333,16 @@ const Furniture = () => {
 
             {/* //Main Side */}
             <main className="md:w-2/3 lg:w-3/4 px-4">
-              <div className="flex flex-row justify-between mb-2 ">
+              <div className="flex flex-row justify-between mb-3 ">
                 <h2>{"Furniture"}</h2>
                 <form>
-                  <>
-                    <Menu as="div" className="p-2">
-                      <div>
-                        <Menu.Button className=" p-1 rounded-md text-gray-600 hover:text-black ">
-                          Sort By:{" "}
-                        </Menu.Button>
-                      </div>
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                      >
-                        <Menu.Items className=" origin-top-right relative mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <Menu.Item>
-                            {({ active }) => (
-                              <p
-                                className={classNames(
-                                  active ? "bg-gray-200" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                {`Popular`}
-                              </p>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <p
-                                className={classNames(
-                                  active ? "bg-gray-200" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                {`Best Seller`}
-                              </p>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <p
-                                className={classNames(
-                                  active ? "bg-gray-200" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                {`Price - Low to High`}
-                              </p>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <p
-                                className={classNames(
-                                  active ? "bg-gray-200" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                {`Price - High to Low`}
-                              </p>
-                            )}
-                          </Menu.Item>
-                        </Menu.Items>
-                      </Transition>
-                    </Menu>
-                  </>
+                  <label htmlFor="sort" className="mx-2">Sort By:</label>
+                  <select name="sort" id="sort" className="mx-2">
+                    <option>Popular</option>
+                    <option>Best Sellers</option>
+                    <option>Price - Low to High</option>
+                    <option>Price - High to Low</option>
+                  </select>
                 </form>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">

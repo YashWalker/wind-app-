@@ -22,7 +22,7 @@ const Search = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    history.push(`/furniture?${text}`);
+    history(`/furniture?${text}`);
   };
 
   const show = () => {
@@ -53,7 +53,7 @@ const Search = () => {
       >
         <div className="container relative w-full px-4 ">
           <div className="relative inline-flex flex-row items-center  border-separate">
-            <form className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 space-y-3 md:space-y-0 justify-center">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 space-y-3 md:space-y-0 justify-center">
               <div className=" relative ">
                 <input
                   onChange={handleChange}

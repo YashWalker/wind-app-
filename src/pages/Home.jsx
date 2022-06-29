@@ -4,11 +4,13 @@ import SlideView from "../components/Products/SlideView";
 
 import Footer from "../components/Navbar/Footer";
 import FeatureProduct from "../components/Products/FeatureProduct";
+import BestSellers from "../components/Products/BestSellers";
 const Home = () => {
   return (
     <>
       <Category />
       <FeatureProduct />
+      <BestSellers/>
       <SlideView />
      
       <hr className="my-20" />

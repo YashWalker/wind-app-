@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { getProducts } from "../../functions/product";
 import ProductCard from "./ProductCard";
-// Import Swiper React components
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper";
 
@@ -10,9 +9,8 @@ import { Navigation, Pagination, A11y } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 
-const SlideView = () => {
+const BestSellers = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -22,28 +20,23 @@ const SlideView = () => {
 
   const loadAllProducts = () => {
     setLoading(true);
-    getProducts("createdAt" , "desc")
-      .then((res) => {
-        setProducts(res.data);
-
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      });
+    // sort, order, limit
+    getProducts("sold", "desc").then((res) => {
+      setProducts(res.data);
+      setLoading(false);
+    });
   };
-
   let slidesPerView = 5;
   let centeredSlides = true;
   let spaceBetween = 30;
 
+
   return (
     <>
-      <section className="container">
+     <section className="container">
         <div className="">
           <div className="text-center w-screen  ">
-            <h2 className="text-3xl text-gray-600 mb-10">New Arrivals</h2>
+            <h2 className="text-3xl text-gray-600 mb-10">Best Sellers</h2>
           </div>
         </div>
         <div className="products-carousel">
@@ -72,4 +65,4 @@ const SlideView = () => {
   );
 };
 
-export default SlideView;
+export default BestSellers;
