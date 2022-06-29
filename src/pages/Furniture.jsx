@@ -1,6 +1,5 @@
-import Filters from "../components/Utils/Filters";
 import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   getProductsByCount,
   fetchProductsByFilter,
@@ -8,10 +7,16 @@ import {
 import { getCategories } from "../functions/category";
 import { getSubs } from "../functions/sub";
 import { useSelector, useDispatch } from "react-redux";
-import { HeartIcon } from "@heroicons/react/outline";
+import { HeartIcon, StarIcon } from "@heroicons/react/outline";
 import { showAverage } from "../functions/rating";
+import "rc-slider/assets/index.css";
+import Range from "rc-slider";
+import StarRatings from "react-star-ratings";
+import { Menu, Transition } from "@headlessui/react";
 
-// import Star from "../components/forms/Star";
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const Furniture = () => {
   const [products, setProducts] = useState([]);
@@ -20,10 +25,9 @@ const Furniture = () => {
   const [ok, setOk] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);
-
+  const [star, setStar] = useState("");
   const [subs, setSubs] = useState([]);
   const [sub, setSub] = useState("");
-
   const [finishes, setFinishes] = useState([
     "Walnut",
     "Natural Teak",
@@ -68,34 +72,31 @@ const Furniture = () => {
     return () => clearTimeout(delayed);
   }, [text]);
 
-  // // 3. load products based on price range
-  // useEffect(() => {
-  //   console.log("ok to request");
-  //   fetchProducts({ price });
-  // }, [ok]);
+  // 3. load products based on price range
+  useEffect(() => {
+    console.log("ok to request");
+    fetchProducts({ price });
+  }, [ok]);
 
-  // const handleSlider = (value) => {
-  //   dispatch({
-  //     type: "SEARCH_QUERY",
-  //     payload: { text: "" },
-  //   });
+  const handleSlider = (value) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
 
-  //   // reset
-  //   setCategoryIds([]);
-  //   setPrice(value);
-  //   setStar("");
-  //   setSub("");
-  //   setBrand("");
-  //   setColor("");
-  //   setShipping("");
-  //   setTimeout(() => {
-  //     setOk(!ok);
-  //   }, 300);
-  // };
+    // reset
+    setCategoryIds([]);
+    setPrice(value);
+    setStar("");
+    setSub("");
+    setFinish("");
+    setShipping("");
+    setTimeout(() => {
+      setOk(!ok);
+    }, 300);
+  };
 
   // // 4. load products based on category
-
-  // handle check for categories
   const handleCheck = (e) => {
     // reset
     dispatch({
@@ -103,9 +104,8 @@ const Furniture = () => {
       payload: { text: "" },
     });
     setPrice([0, 0]);
-
+    setStar("");
     setSub("");
-
     setFinish("");
     setShipping("");
     // console.log(e.target.value);
@@ -126,61 +126,38 @@ const Furniture = () => {
     fetchProducts({ category: inTheState });
   };
 
-  // // 5. show products by star rating
-  // const handleStarClick = (num) => {
-  //   // console.log(num);
-  //   dispatch({
-  //     type: "SEARCH_QUERY",
-  //     payload: { text: "" },
-  //   });
-  //   setPrice([0, 0]);
-  //   setCategoryIds([]);
-  //   setStar(num);
-  //   setSub("");
-  //   setBrand("");
-  //   setColor("");
-  //   setShipping("");
-  //   fetchProducts({ stars: num });
-  // };
+  // 5. show products by star rating
+  const handleStarClick = (num) => {
+    // console.log(num);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar(num);
+    setSub("");
 
-  // const showStars = () => (
-  //   <div className="pr-4 pl-4 pb-2">
-  //     <Star starClick={handleStarClick} numberOfStars={5} />
-  //     <Star starClick={handleStarClick} numberOfStars={4} />
-  //     <Star starClick={handleStarClick} numberOfStars={3} />
-  //     <Star starClick={handleStarClick} numberOfStars={2} />
-  //     <Star starClick={handleStarClick} numberOfStars={1} />
-  //   </div>
-  // );
+    setFinish("");
+    setShipping("");
+    fetchProducts({ stars: num });
+  };
 
-  // // 6. show products by sub category
-  // const showSubs = () =>
-  //   subs.map((s) => (
-  //     <div
-  //       key={s._id}
-  //       onClick={() => handleSub(s)}
-  //       className="p-1 m-1 badge badge-secondary"
-  //       style={{ cursor: "pointer" }}
-  //     >
-  //       {s.name}
-  //     </div>
-  //   ));
-
-  // const handleSub = (sub) => {
-  //   // console.log("SUB", sub);
-  //   setSub(sub);
-  //   dispatch({
-  //     type: "SEARCH_QUERY",
-  //     payload: { text: "" },
-  //   });
-  //   setPrice([0, 0]);
-  //   setCategoryIds([]);
-  //   setStar("");
-  //   setBrand("");
-  //   setColor("");
-  //   setShipping("");
-  //   fetchProducts({ sub });
-  // };
+  // 6. show products by sub category
+  const handleSub = (sub) => {
+    // console.log("SUB", sub);
+    setSub(sub);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar("");
+    setFinish("");
+    setShipping("");
+    fetchProducts({ sub });
+  };
 
   // 8. show products based on color
 
@@ -192,10 +169,10 @@ const Furniture = () => {
     });
     setPrice([0, 0]);
     setCategoryIds([]);
-
+    setStar("");
     setFinish(e.target.value);
     setShipping("");
-    fetchProducts({ color: e.target.value });
+    fetchProducts({ finish: e.target.value });
   };
 
   // 9. show products based on shipping yes/no
@@ -220,39 +197,212 @@ const Furniture = () => {
       <section className="py-12">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row -mx-4">
-            <Filters
-              categoryIds={categoryIds}
-              categories={categories}
-              handleCheck={handleCheck}
-              handleFinish={handleFinish}
-              finishes={finishes}
-              finish={finish}
-              handleShippingchange={handleShippingchange}
-              shipping={shipping}
-            />
+            <aside className="md:w-1/3 lg:w-1/4 px-4">
+              <div className="hidden md:block px-6 py-4 border border-gray-200 bg-white rounded shadow-sm">
+                <h3 className="font-semibold mb-2">Category</h3>
+                <ul className="text-gray-500 space-y-1">
+                  {categories.map((c) => (
+                    <li key={c._id}>
+                      <label className="flex items-center">
+                        <input
+                          onChange={handleCheck}
+                          className=""
+                          value={c._id}
+                          name="category"
+                          type="checkbox"
+                          checked={categoryIds.includes(c._id)}
+                        />
+                        <span className="ml-2 text-gray-500"> {c.name} </span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+
+                <hr className="my-4" />
+                <h3 className="font-semibold mb-2">Sub-Category</h3>
+                <div className="text-gray-500 space-y-1">
+                  {subs.map((s) => (
+                    <div key={s._id}>
+                      <div
+                        className=""
+                        value={s._id}
+                        name="category"
+                        type="checkbox"
+                        onClick={() => handleSub(s)}
+                      >
+                        <span className="ml-2 text-gray-500"> {s.name} </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <hr className="my-4" />
+                <h3 className="font-semibold mb-2">Price</h3>
+                <ul className="space-y-1">
+                  <li>
+                    <label
+                      htmlFor="pricerange"
+                      className="flex items-center flex-col"
+                    >
+                      <div className="flex flex-row justify-between w-full my-2">
+                        <span className="ml-2 text-gray-500 mx-1"> Min </span>
+                        <span className="ml-2 text-gray-500"> Max </span>
+                      </div>
+                      {/* <input
+                  type="range"
+                  className="w-full  bg-gray-200 rounded-lg appearance-none cursor-pointer z-50  "
+                  id="pricerange"
+                  min={0}
+                  max={100000}
+                  step={500}
+                  value={price}
+                  onChange={handleSlider}
+                  defaultValue={0}
+                /> */}
+                      <Range />₹ {price}
+                    </label>
+                  </li>
+                </ul>
+
+                <hr className="my-4" />
+                <h3 className="font-semibold mb-2">Star Rating</h3>
+                <div className="space-y-1">
+                  <StarRatings
+                    numberOfStars={5}
+                    changeRating={handleStarClick}
+                    isSelectable={true}
+                    starRatedColor="rgb(255, 188, 11)"
+                    starHoverColor="rgb(255, 188, 11)"
+                    starDimension="1.5rem"
+                    starSpacing=".25rem"
+                  />
+                </div>
+
+                <hr className="my-4" />
+                <h3 className="font-semibold mb-2">Finish</h3>
+                <ul className="space-y-1">
+                  {finishes.map((f) => (
+                    <li>
+                      <label className="flex items-center" key={f}>
+                        <input
+                          value={f}
+                          name={f}
+                          checked={f === finish}
+                          type="checkbox"
+                          onChange={handleFinish}
+                          className="h-4 w-4"
+                        />
+                        <span className="ml-2 text-gray-500">{f}</span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+
+                <hr className="my-4" />
+
+                <h3 className="font-semibold mb-2">Shipping</h3>
+                <ul className="space-y-1">
+                  <li>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        onChange={handleShippingchange}
+                        value="Yes"
+                        checked={shipping === "Yes"}
+                        className="h-4 w-4"
+                      />
+                      <span className="ml-2 text-gray-500"> Yes </span>
+                    </label>
+                  </li>
+                  <li>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        onChange={handleShippingchange}
+                        value="No"
+                        checked={shipping === "No"}
+                        className="h-4 w-4"
+                      />
+                      <span className="ml-2 text-gray-500"> No </span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </aside>
+
+            {/* //Main Side */}
             <main className="md:w-2/3 lg:w-3/4 px-4">
-              <div className="flex flex-row justify-between ">
+              <div className="flex flex-row justify-between mb-2 ">
                 <h2>{"Furniture"}</h2>
-                <button type="button" className="products-filter-btn">
-                  <i className="icon-filters"></i>
-                </button>
-                <form className="flex flex-row">
-                  <div className="products__filter__select">
-                    <h4>Show products: </h4>
-                    <div className="select-wrapper">
-                      <select>
-                        <option>Popular</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="products__filter__select">
-                    <h4>Sort by: </h4>
-                    <div className="select-wrapper">
-                      <select>
-                        <option>Popular</option>
-                      </select>
-                    </div>
-                  </div>
+                <form>
+                  <>
+                    <Menu as="div" className="p-2">
+                      <div>
+                        <Menu.Button className=" p-1 rounded-md text-gray-600 hover:text-black ">
+                          Sort By:{" "}
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className=" origin-top-right relative mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Item>
+                            {({ active }) => (
+                              <p
+                                className={classNames(
+                                  active ? "bg-gray-200" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                {`Popular`}
+                              </p>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <p
+                                className={classNames(
+                                  active ? "bg-gray-200" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                {`Best Seller`}
+                              </p>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <p
+                                className={classNames(
+                                  active ? "bg-gray-200" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                {`Price - Low to High`}
+                              </p>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <p
+                                className={classNames(
+                                  active ? "bg-gray-200" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                {`Price - High to Low`}
+                              </p>
+                            )}
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                  </>
                 </form>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -289,15 +439,10 @@ const Furniture = () => {
                         </Link>
                         <p className="font-semibold mb-2">₹ {p.sellprice}</p>
                         <div className="flex justify-between">
-                          <button
-                            className="px-4 py-2 inline-block text-white text-center bg-amber-800 border border-transparent rounded-md hover:bg-amber-900"
-                           
-                          >
+                          <button className="px-4 py-2 inline-block text-white text-center bg-amber-800 border border-transparent rounded-md hover:bg-amber-900">
                             Add to cart
                           </button>
-                          <button
-                            className="mx-3 px-3 py-2 inline-block text-red-700  border border-gray-300 rounded-md hover:bg-gray-100"
-                          >
+                          <button className="mx-3 px-3 py-2 inline-block text-red-700  border border-gray-300 rounded-md hover:bg-gray-100">
                             <HeartIcon className="h-6 w-6 active:fill-red-700 " />
                           </button>
                         </div>

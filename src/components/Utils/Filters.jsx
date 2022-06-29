@@ -1,7 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-const Filters = () => {
+
+const Filters = ({ showCategories , price}) => {
+ 
+  
   return (
     <>
       <aside className="md:w-1/3 lg:w-1/4 px-4">
@@ -17,40 +19,41 @@ const Filters = () => {
 
           <ul className="text-gray-500 space-y-1">
             <li>
-              <a className="hover:text-blue-600 hover:underline" href="#">
-                Electronics{" "}
-              </a>
+              {showCategories}
+            
+              
             </li>
+            
+          </ul>
+
+          <hr className="my-4" />
+          <h3 className="font-semibold mb-2">Price</h3>
+          <ul className="space-y-1">
             <li>
-              <a className="hover:text-blue-600 hover:underline" href="#">
-                Watches{" "}
-              </a>
-            </li>
-            <li>
-              <a className="hover:text-blue-600 hover:underline" href="#">
-                Cinema{" "}
-              </a>
-            </li>
-            <li>
-              <a className="hover:text-blue-600 hover:underline" href="#">
-                Clothes{" "}
-              </a>
-            </li>
-            <li>
-              <a className="hover:text-blue-600 hover:underline" href="#">
-                Home items{" "}
-              </a>
-            </li>
-            <li>
-              <a className="hover:text-blue-600 hover:underline" href="#">
-                Smartwatches{" "}
-              </a>
+              <label for="pricerange" className="flex items-center flex-col">
+                <div className="flex flex-row justify-between w-full my-2">
+                  <span className="ml-2 text-gray-500 mx-1"> Min </span>
+                  <span className="ml-2 text-gray-500"> Max </span>
+                </div>
+                {/* <input
+                  type="range"
+                  className="w-full  bg-gray-200 rounded-lg appearance-none cursor-pointer z-50  "
+                  id="pricerange"
+                  min={0}
+                  max={100000}
+                  step={500}
+                  value={price}
+                  onChange={handleSlider}
+                  defaultValue={0}
+                /> */}
+                
+               
+              </label>
             </li>
           </ul>
 
           <hr className="my-4" />
-
-          <h3 className="font-semibold mb-2">Filter by</h3>
+          <h3 className="font-semibold mb-2">Price</h3>
           <ul className="space-y-1">
             <li>
               <label className="flex items-center">
